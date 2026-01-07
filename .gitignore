@@ -1,0 +1,23 @@
+# Logs and generated data
+logs/*.log
+dashboard/news-cache/*.json
+
+# PID files
+dashboard/.*.pid
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# User config overrides (keep template, ignore user-specific)
+# ~/.config/system-monitor/config is user-specific and not tracked
