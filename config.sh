@@ -48,7 +48,7 @@ export JOURNAL_ERROR_THRESHOLD="${JOURNAL_ERROR_THRESHOLD:-100}"
 # Timing
 #-------------------------------------------------------------------------------
 export CHECK_INTERVAL="${CHECK_INTERVAL:-30}"       # Seconds between monitor checks
-export NEWS_REFRESH_INTERVAL="${NEWS_REFRESH_INTERVAL:-5}"  # Minutes between news refreshes
+export NEWS_REFRESH_INTERVAL="${NEWS_REFRESH_INTERVAL:-2}"  # Minutes between news refreshes
 export DASHBOARD_PORT="${DASHBOARD_PORT:-8787}"     # HTTP server port
 export NEWS_CACHE_TTL="${NEWS_CACHE_TTL:-3600}"     # News cache TTL in seconds (1 hour)
 export LOG_RETENTION_DAYS="${LOG_RETENTION_DAYS:-30}"  # Days to keep old logs
