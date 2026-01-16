@@ -10,7 +10,7 @@ A personal system monitoring and news aggregation suite for Ubuntu workstations.
 # 1. Validate your installation
 ~/system-monitor/scripts/validate.sh
 
-# 2. Launch the web-based Command Center (recommended)
+# 2. Launch the web-based Radio Free Albany (recommended)
 ~/system-monitor/dashboard/launch.sh
 
 # Or use the terminal dashboard for a quick view
@@ -23,7 +23,7 @@ A personal system monitoring and news aggregation suite for Ubuntu workstations.
 ~/system-monitor/scripts/news-curator-assistant.sh
 ```
 
-**After launching the Command Center**, your browser opens to `http://localhost:8787` with a live dashboard showing system metrics and news.
+**After launching the Radio Free Albany**, your browser opens to `http://localhost:8787` with a live dashboard showing system metrics and news.
 
 ---
 
@@ -90,7 +90,7 @@ crontab -e
 - **Google News RSS** - Regional and topical news feeds
 
 ### Dashboard Options
-- **Command Center** - Browser-based Drudge-style 3-column layout with scrolling tickers
+- **Radio Free Albany** - Browser-based Drudge-style 3-column layout with scrolling tickers
 - **Terminal Dashboard** - Quick command-line view with color-coded status
 - **News Desk** - Interactive terminal menu for browsing news categories
 
@@ -121,7 +121,7 @@ crontab -e
 │   └── validate.sh             # Installation validation script
 │
 ├── dashboard/                  # Web dashboard and data fetchers
-│   ├── index.html              # Main Command Center web interface
+│   ├── index.html              # Main Radio Free Albany web interface
 │   ├── launch.sh               # Starts everything (server + refresh)
 │   ├── stop.sh                 # Stops background processes
 │   ├── dashboard.sh            # Terminal-based dashboard
@@ -265,7 +265,7 @@ Installation validation and diagnostic script.
 
 ### dashboard/launch.sh
 
-Starts the complete Command Center ecosystem.
+Starts the complete Radio Free Albany ecosystem.
 
 **What it does:**
 1. Kills any existing dashboard processes
@@ -420,7 +420,7 @@ export NEWS_SPORTS_ENABLED=1
 
 ### HTTP Server
 
-The Command Center uses Python's built-in HTTP server (`python3 -m http.server`). This is designed for **local use only**.
+The Radio Free Albany uses Python's built-in HTTP server (`python3 -m http.server`). This is designed for **local use only**.
 
 **Current protections:**
 - Server binds to `127.0.0.1` only (not accessible from network)

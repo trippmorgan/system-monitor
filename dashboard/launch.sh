@@ -50,7 +50,7 @@ NC='\033[0m'
 
 echo -e "${CYAN}"
 echo "╔════════════════════════════════════════════╗"
-echo "║     System Command Center - Launcher       ║"
+echo "║       Radio Free Albany - Launcher         ║"
 echo "╚════════════════════════════════════════════╝"
 echo -e "${NC}"
 

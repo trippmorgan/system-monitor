@@ -4,7 +4,7 @@
 #===============================================================================
 # PURPOSE:
 #   Displays a quick system status overview directly in the terminal.
-#   Alternative to the web-based Command Center for quick checks.
+#   Alternative to the web-based Radio Free Albany for quick checks.
 #
 # USAGE:
 #   ~/system-monitor/dashboard/dashboard.sh

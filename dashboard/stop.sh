@@ -1,9 +1,9 @@
 #!/bin/bash
 #===============================================================================
-# stop.sh - Stop Command Center Background Processes
+# stop.sh - Stop Radio Free Albany Background Processes
 #===============================================================================
 # PURPOSE:
-#   Cleanly stops all Command Center background processes started by launch.sh.
+#   Cleanly stops all Radio Free Albany background processes started by launch.sh.
 #   Kills both the data refresh loop and the HTTP server.
 #
 # USAGE:
@@ -14,7 +14,7 @@ DASHBOARD_DIR="$HOME/system-monitor/dashboard"
 PID_FILE="$DASHBOARD_DIR/.refresh.pid"
 SERVER_PID_FILE="$DASHBOARD_DIR/.server.pid"
 
-echo "Stopping Command Center..."
+echo "Stopping Radio Free Albany..."
 
 # Kill the background data refresh loop
 if [ -f "$PID_FILE" ]; then

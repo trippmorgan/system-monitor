@@ -21,7 +21,7 @@ Shell scripts for automated monitoring and maintenance:
 - `news-curator-assistant.sh` - Interactive terminal news browser
 
 ### 2. Dashboard (`dashboard/`)
-Web-based Command Center with supporting scripts:
+Web-based Radio Free Albany with supporting scripts:
 - `index.html` - Drudge Report-style 3-column layout with scrolling tickers
 - `launch.sh` / `stop.sh` - Process management for HTTP server and refresh loop
 - `system-stats.sh` - Generates `stats.json` with current system metrics
@@ -120,7 +120,7 @@ After modifying scripts:
 # Test news fetcher
 ./dashboard/news-fetcher.sh
 
-# Restart Command Center to see changes
+# Restart Radio Free Albany to see changes
 ./dashboard/stop.sh && ./dashboard/launch.sh
 ```
 

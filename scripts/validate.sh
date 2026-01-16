@@ -307,7 +307,7 @@ if [ $FAIL -eq 0 ]; then
     echo ""
     echo "Quick start:"
     echo "  Terminal dashboard:  ~/system-monitor/dashboard/dashboard.sh"
-    echo "  Command Center:      ~/system-monitor/dashboard/launch.sh"
+    echo "  Radio Free Albany:   ~/system-monitor/dashboard/launch.sh"
     echo "  Health check:        ~/system-monitor/scripts/health-check.sh"
     echo ""
     exit 0

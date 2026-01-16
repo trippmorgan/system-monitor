@@ -4,7 +4,7 @@
 #===============================================================================
 # PURPOSE:
 #   Collects current system metrics and outputs them as JSON for the
-#   Command Center web dashboard. Called by the background refresh loop.
+#   Radio Free Albany web dashboard. Called by the background refresh loop.
 #
 # USAGE:
 #   ~/system-monitor/dashboard/system-stats.sh

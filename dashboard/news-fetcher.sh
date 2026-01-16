@@ -1,10 +1,10 @@
 #!/bin/bash
 #===============================================================================
-# news-fetcher.sh - News Aggregator for Command Center
+# news-fetcher.sh - News Aggregator for Radio Free Albany
 #===============================================================================
 # PURPOSE:
 #   Fetches news from multiple sources and aggregates them into a single JSON
-#   file for the Command Center dashboard. Includes bias scoring for sources.
+#   file for the Radio Free Albany dashboard. Includes bias scoring for sources.
 #
 # USAGE:
 #   ~/system-monitor/dashboard/news-fetcher.sh
