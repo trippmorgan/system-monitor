@@ -112,6 +112,59 @@ FEATURES:
             margin-top: 5px;
         }
 
+        /* LIVE RADIO PLAYER */
+        .radio-player {
+            text-align: center;
+            padding: 10px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border-bottom: 2px solid #c41e3a;
+        }
+
+        .radio-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #c41e3a 0%, #8b0000 100%);
+            color: #fff;
+            font-family: 'Arial Black', Arial, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(196, 30, 58, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .radio-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(196, 30, 58, 0.6);
+        }
+
+        .radio-btn.playing {
+            background: linear-gradient(135deg, #228B22 0%, #006400 100%);
+            box-shadow: 0 4px 15px rgba(34, 139, 34, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        .radio-btn.playing:hover {
+            box-shadow: 0 6px 20px rgba(34, 139, 34, 0.6);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        .radio-btn::before {
+            content: '📻 ';
+        }
+
+        .radio-btn.playing::before {
+            content: '🔊 ';
+        }
+
         /* MAIN LAYOUT - 3 COLUMNS */
         .main-container {
             display: grid;
@@ -435,6 +488,14 @@ FEATURES:
         <div class="datetime" id="datetime">Loading...</div>
     </div>
 
+    <!-- LIVE RADIO PLAYER -->
+    <div class="radio-player">
+        <audio id="radio-stream" preload="none">
+            <source src="https://stream.aiir.com/0ompkrc5jxntv" type="audio/mpeg">
+        </audio>
+        <button id="radio-btn" class="radio-btn" onclick="toggleRadio()">Listen to Live Radio Now!</button>
+    </div>
+
     <!-- MAIN 3-COLUMN LAYOUT -->
     <div class="main-container">
         <!-- LEFT COLUMN -->
@@ -587,6 +648,32 @@ FEATURES:
         let countdown = 120; // 2 minutes
         const MAX_STORIES_PER_CATEGORY = 8;
         const MAX_STORY_AGE_HOURS = 24; // Drop stories older than this
+        let isRadioPlaying = false;
+
+        //----------------------------------------------------------------------
+        // Live Radio Player
+        //----------------------------------------------------------------------
+        function toggleRadio() {
+            const audio = document.getElementById('radio-stream');
+            const btn = document.getElementById('radio-btn');
+
+            if (isRadioPlaying) {
+                audio.pause();
+                audio.currentTime = 0;
+                btn.textContent = 'Listen to Live Radio Now!';
+                btn.classList.remove('playing');
+                isRadioPlaying = false;
+            } else {
+                audio.play().then(() => {
+                    btn.textContent = 'Stop Radio';
+                    btn.classList.add('playing');
+                    isRadioPlaying = true;
+                }).catch(err => {
+                    console.error('Audio playback failed:', err);
+                    btn.textContent = 'Click to Retry';
+                });
+            }
+        }
 
         //----------------------------------------------------------------------
         // Date/Time Display
