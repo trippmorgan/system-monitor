@@ -35,9 +35,9 @@ Requirements for this upgrade cycle. Each maps to roadmap phases.
 
 ### Dashboard Verification
 
-- [ ] **DASH-01**: `dashboard/index.html` uses NES.css arcade theme (confirmed active)
-- [ ] **DASH-02**: `dashboard/launch.sh` starts HTTP server and refresh loop without errors
-- [ ] **DASH-03**: Dashboard loads at `http://localhost:8787` and renders all panels
+- [x] **DASH-01**: `dashboard/index.html` uses NES.css arcade theme (confirmed active)
+- [x] **DASH-02**: `dashboard/launch.sh` starts HTTP server and refresh loop without errors
+- [x] **DASH-03**: Dashboard loads at `http://localhost:8787` and renders all panels
 
 ## v2 Requirements
 
@@ -86,9 +86,9 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 | NEWS-05 | Phase 3 | Complete |
 | NEWS-06 | Phase 3 | Complete |
 | NEWS-07 | Phase 3 | Complete |
-| DASH-01 | Phase 4 | Pending |
-| DASH-02 | Phase 4 | Pending |
-| DASH-03 | Phase 4 | Pending |
+| DASH-01 | Phase 4 | Complete |
+| DASH-02 | Phase 4 | Complete |
+| DASH-03 | Phase 4 | Complete |
 
 **Coverage:**
 - v1 requirements: 20 total
@@ -97,4 +97,4 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-09 after Phase 3 completion*
+*Last updated: 2026-02-09 after Phase 4 completion — ALL REQUIREMENTS SATISFIED*
