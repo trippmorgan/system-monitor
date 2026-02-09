@@ -10,11 +10,11 @@
 #   - Opens dashboard in default browser
 #
 # USAGE:
-#   ~/system-monitor/dashboard/launch.sh
+#   ~/Documents/radio-free-albany/dashboard/launch.sh
 #   or use alias: command-center
 #
 # TO STOP:
-#   ~/system-monitor/dashboard/stop.sh
+#   ~/Documents/radio-free-albany/dashboard/stop.sh
 #
 # PORTS:
 #   Dashboard served on http://localhost:8787
@@ -30,14 +30,14 @@ if [ -f "$CONFIG_FILE" ]; then
     source "$CONFIG_FILE"
 else
     echo "Warning: config.sh not found, using defaults" >&2
-    DASHBOARD_DIR="$HOME/system-monitor/dashboard"
+    DASHBOARD_DIR="$SCRIPT_DIR"
     DASHBOARD_PORT=8787
     CHECK_INTERVAL=30
     NEWS_REFRESH_INTERVAL=5
     ENABLE_BROWSER_OPEN=1
 fi
 
-DASHBOARD_DIR="${DASHBOARD_DIR:-$HOME/system-monitor/dashboard}"
+DASHBOARD_DIR="${DASHBOARD_DIR:-$SCRIPT_DIR}"
 PID_FILE="$DASHBOARD_DIR/.refresh.pid"       # Stores refresh loop PID
 SERVER_PID_FILE="$DASHBOARD_DIR/.server.pid" # Stores HTTP server PID
 PORT="${DASHBOARD_PORT:-8787}"
@@ -140,6 +140,6 @@ echo "Background processes running:"
 echo "  - Data refresh: PID $(cat $PID_FILE)"
 echo "  - Web server:   PID $(cat $SERVER_PID_FILE) on port $PORT"
 echo ""
-echo "To stop everything: ~/system-monitor/dashboard/stop.sh"
+echo "To stop everything: ~/Documents/radio-free-albany/dashboard/stop.sh"
 echo "To chat with Claude: run 'claude' in terminal"
 echo ""
