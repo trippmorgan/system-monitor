@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Fix FaceBot Server** - Repair the FaceBot Express server so it starts and serves its API
 - [x] **Phase 2: Wire BotSpace Chat Panel** - Connect the dashboard chat UI to the running FaceBot API
-- [ ] **Phase 3: Fix News Fetcher** - Fix broken RSS feed URLs, add atomic writes, and ensure local Albany news appears
+- [x] **Phase 3: Fix News Fetcher** - Fix broken RSS feed URLs, add atomic writes, and ensure local Albany news appears
 - [ ] **Phase 4: Verify Arcade Dashboard** - End-to-end verification that all panels render at localhost:8787
 
 ## Phase Details
@@ -77,7 +77,7 @@ Plans:
 - Concurrent JSON writes can corrupt dashboard data without atomic writes (Pitfall 6)
 
 Plans:
-- [ ] 03-01-PLAN.md — Fix feed URLs, add atomic writes, title sanitization, bias labels, and Hacker News feed
+- [x] 03-01-PLAN.md — Fix feed URLs, add atomic writes, title sanitization, bias labels, and Hacker News feed
 
 ### Phase 4: Verify Arcade Dashboard
 **Goal**: The full Radio Free Albany dashboard loads and renders all panels correctly at localhost:8787
@@ -102,9 +102,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Fix FaceBot Server | 1/1 | ✓ Complete | 2026-02-09 |
 | 2. Wire BotSpace Chat Panel | 1/1 | ✓ Complete | 2026-02-09 |
-| 3. Fix News Fetcher | 0/1 | Not started | - |
+| 3. Fix News Fetcher | 1/1 | ✓ Complete | 2026-02-09 |
 | 4. Verify Arcade Dashboard | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-09 after Phase 3 planning*
+*Last updated: 2026-02-09 after Phase 3 completion*

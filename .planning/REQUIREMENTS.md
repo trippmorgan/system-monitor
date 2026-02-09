@@ -25,13 +25,13 @@ Requirements for this upgrade cycle. Each maps to roadmap phases.
 
 ### News Fetcher (Local Sources)
 
-- [ ] **NEWS-01**: News fetcher pulls from Albany Herald RSS feed (or Google News fallback if unavailable)
-- [ ] **NEWS-02**: News fetcher pulls from WALB News 10 RSS feed (or Google News fallback)
-- [ ] **NEWS-03**: News fetcher pulls from WTXL ABC 27 RSS feed (or Google News fallback)
-- [ ] **NEWS-04**: RSS parsing uses Python `xml.etree.ElementTree` instead of grep regex
-- [ ] **NEWS-05**: Each news item includes a working article URL (not generic homepage link)
-- [ ] **NEWS-06**: Local news items are categorized as `local` with appropriate bias labels
-- [ ] **NEWS-07**: JSON output uses atomic writes (write to .tmp, then mv)
+- [x] **NEWS-01**: News fetcher pulls from Albany Herald RSS feed (or Google News fallback if unavailable)
+- [x] **NEWS-02**: News fetcher pulls from WALB News 10 RSS feed (or Google News fallback)
+- [x] **NEWS-03**: News fetcher pulls from WTXL ABC 27 RSS feed (or Google News fallback)
+- [x] **NEWS-04**: RSS parsing uses Python `xml.etree.ElementTree` instead of grep regex
+- [x] **NEWS-05**: Each news item includes a working article URL (not generic homepage link)
+- [x] **NEWS-06**: Local news items are categorized as `local` with appropriate bias labels
+- [x] **NEWS-07**: JSON output uses atomic writes (write to .tmp, then mv)
 
 ### Dashboard Verification
 
@@ -79,13 +79,13 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 | CHAT-03 | Phase 2 | Complete |
 | CHAT-04 | Phase 2 | Complete |
 | CHAT-05 | Phase 2 | Complete |
-| NEWS-01 | Phase 3 | Pending |
-| NEWS-02 | Phase 3 | Pending |
-| NEWS-03 | Phase 3 | Pending |
-| NEWS-04 | Phase 3 | Pending |
-| NEWS-05 | Phase 3 | Pending |
-| NEWS-06 | Phase 3 | Pending |
-| NEWS-07 | Phase 3 | Pending |
+| NEWS-01 | Phase 3 | Complete |
+| NEWS-02 | Phase 3 | Complete |
+| NEWS-03 | Phase 3 | Complete |
+| NEWS-04 | Phase 3 | Complete |
+| NEWS-05 | Phase 3 | Complete |
+| NEWS-06 | Phase 3 | Complete |
+| NEWS-07 | Phase 3 | Complete |
 | DASH-01 | Phase 4 | Pending |
 | DASH-02 | Phase 4 | Pending |
 | DASH-03 | Phase 4 | Pending |
@@ -97,4 +97,4 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-09 after Phase 2 completion*
+*Last updated: 2026-02-09 after Phase 3 completion*
