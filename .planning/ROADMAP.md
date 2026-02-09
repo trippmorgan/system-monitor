@@ -23,12 +23,12 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Goal**: FaceBot server starts cleanly and serves chat data via its REST API at localhost:4000
 **Depends on**: Nothing (first phase)
 **Requirements**: FBOT-01, FBOT-02, FBOT-03, FBOT-04, FBOT-05
+**Plans:** 1 plan
 **Success Criteria** (what must be TRUE):
   1. `npm install` in ~/Documents/facebot completes with zero native compilation errors
   2. `npm start` launches FaceBot without crashes or import errors
   3. `curl http://localhost:4000/api/feed` returns a JSON array (even if empty)
   4. `curl -X POST http://localhost:4000/api/post -d '{"username":"tripp","content":"test"}' -H 'Content-Type: application/json'` returns a success response and the post appears in subsequent /api/feed calls
-**Plans**: TBD
 
 **Risk flags:**
 - better-sqlite3 to sqlite3 is NOT a drop-in swap -- every DB call needs async/await conversion (Pitfall 2)
@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - `activitypub-express` in package.json is unused and may block npm install (Pitfall 12)
 
 Plans:
-- [ ] 01-01: Migrate FaceBot from better-sqlite3 sync API to sqlite3 async API
+- [ ] 01-01-PLAN.md — Fix dependencies, uuid replacement, agent seeding, and startup race condition
 
 ### Phase 2: Wire BotSpace Chat Panel
 **Goal**: The BotSpace panel in the dashboard displays live chat messages from FaceBot and accepts user input
@@ -100,7 +100,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fix FaceBot Server | 0/1 | Not started | - |
+| 1. Fix FaceBot Server | 0/1 | Planning complete | - |
 | 2. Wire BotSpace Chat Panel | 0/1 | Not started | - |
 | 3. Fix News Fetcher | 0/1 | Not started | - |
 | 4. Verify Arcade Dashboard | 0/1 | Not started | - |
