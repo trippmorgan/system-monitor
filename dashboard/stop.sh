@@ -7,10 +7,15 @@
 #   Kills both the data refresh loop and the HTTP server.
 #
 # USAGE:
-#   ~/system-monitor/dashboard/stop.sh
+#   ~/Documents/radio-free-albany/dashboard/stop.sh
 #===============================================================================
 
-DASHBOARD_DIR="$HOME/system-monitor/dashboard"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CONFIG_FILE="$SCRIPT_DIR/../config.sh"
+if [ -f "$CONFIG_FILE" ]; then
+    source "$CONFIG_FILE"
+fi
+DASHBOARD_DIR="${DASHBOARD_DIR:-$SCRIPT_DIR}"
 PID_FILE="$DASHBOARD_DIR/.refresh.pid"
 SERVER_PID_FILE="$DASHBOARD_DIR/.server.pid"
 

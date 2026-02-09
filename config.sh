@@ -9,7 +9,7 @@
 #-------------------------------------------------------------------------------
 # Paths
 #-------------------------------------------------------------------------------
-export MONITOR_HOME="${MONITOR_HOME:-$HOME/system-monitor}"
+export MONITOR_HOME="${MONITOR_HOME:-$HOME/Documents/radio-free-albany}"
 export LOG_DIR="$MONITOR_HOME/logs"
 export DASHBOARD_DIR="$MONITOR_HOME/dashboard"
 export NEWS_CACHE_DIR="$DASHBOARD_DIR/news-cache"
