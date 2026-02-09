@@ -5,23 +5,23 @@
 See: .planning/PROJECT.md (updated 2026-02-08)
 
 **Core value:** Dashboard must display live local news from Albany, GA sources and system health metrics in a single browser tab with a working chat panel connected to FaceBot.
-**Current focus:** Phase 3 complete -- Fix News Fetcher
+**Current focus:** ALL PHASES COMPLETE -- Radio Free Albany fully operational
 
 ## Current Position
 
-Phase: 3 of 4 (Fix News Fetcher)
+Phase: 4 of 4 (Verify Arcade Dashboard)
 Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-02-09 -- Completed 03-01-PLAN.md (Fix News Fetcher)
+Status: PROJECT COMPLETE
+Last activity: 2026-02-09 -- Completed 04-01-PLAN.md (Verify Arcade Dashboard)
 
-Progress: [████████░░] 75%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 3min
-- Total execution time: 0.15 hours
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
@@ -30,9 +30,10 @@ Progress: [████████░░] 75%
 | 01-fix-facebot-server | 1 | 4min | 4min |
 | 02-wire-botspace-chat-panel | 1 | 2min | 2min |
 | 03-fix-news-fetcher | 1 | 3min | 3min |
+| 04-verify-arcade-dashboard | 1 | 3min | 3min |
 
 **Recent Trend:**
-- Last 5 plans: 4min, 2min, 3min
+- Last 5 plans: 4min, 2min, 3min, 3min
 - Trend: stable
 
 *Updated after each plan completion*
@@ -56,6 +57,8 @@ Recent decisions affecting current work:
 - [03-01]: Albany Herald 403 on article pages is Cloudflare bot protection -- URLs are valid article paths, work in browser
 - [03-01]: Google News Albany capped at 3 items to reduce noise from tangential matches
 - [03-01]: Per-source bias_label replaces hardcoded NEUTRAL for all sources
+- [04-01]: Left ~/.config/system-monitor user config path unchanged -- XDG convention, not project path bug
+- [04-01]: Fixed systemctl || echo pattern to capture-then-check to avoid multiline JSON values
 
 ### Pending Todos
 
@@ -64,12 +67,13 @@ None.
 ### Blockers/Concerns
 
 - [Phase 1]: RESOLVED -- sqlite3 async migration complete, server starts and serves API
-- [Phase 1]: Port 4000 occupied by existing process on system -- may need `fuser -k 4000/tcp` before starting FaceBot
+- [Phase 1]: RESOLVED -- Port 4000 occupied by existing process on system -- fuser -k handles it
 - [Phase 2]: RESOLVED -- BotSpace chat panel wired to FaceBot API with XSS protection and backoff polling
 - [Phase 3]: RESOLVED -- All 8 RSS feeds verified working. Albany Herald, WALB, WTXL all returning local items. 38 items across 5 categories.
+- [Phase 4]: RESOLVED -- Dashboard launches at localhost:8787, renders NES.css arcade UI with live stats and 38 news items, shuts down cleanly.
 
 ## Session Continuity
 
 Last session: 2026-02-09
-Stopped at: Phase 3 complete. News fetcher rewritten with 8 working feeds. Ready for Phase 4.
-Resume file: .planning/phases/03-fix-news-fetcher/03-01-SUMMARY.md
+Stopped at: PROJECT COMPLETE. All 4 phases executed. Radio Free Albany fully operational at http://localhost:8787.
+Resume file: .planning/phases/04-verify-arcade-dashboard/04-01-SUMMARY.md
