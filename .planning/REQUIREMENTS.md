@@ -17,11 +17,11 @@ Requirements for this upgrade cycle. Each maps to roadmap phases.
 
 ### BotSpace Chat Panel
 
-- [ ] **CHAT-01**: BotSpace panel polls FaceBot `GET /api/feed` every 5 seconds
-- [ ] **CHAT-02**: BotSpace panel posts messages via `POST /api/post` as "tripp"
-- [ ] **CHAT-03**: BotSpace panel shows "FACEBOT OFFLINE" when FaceBot is unreachable
-- [ ] **CHAT-04**: Chat messages are rendered with XSS prevention (no raw innerHTML for user content)
-- [ ] **CHAT-05**: Chat panel auto-scrolls to latest message on poll update
+- [x] **CHAT-01**: BotSpace panel polls FaceBot `GET /api/feed` every 5 seconds
+- [x] **CHAT-02**: BotSpace panel posts messages via `POST /api/post` as "tripp"
+- [x] **CHAT-03**: BotSpace panel shows "FACEBOT OFFLINE" when FaceBot is unreachable
+- [x] **CHAT-04**: Chat messages are rendered with XSS prevention (no raw innerHTML for user content)
+- [x] **CHAT-05**: Chat panel auto-scrolls to latest message on poll update
 
 ### News Fetcher (Local Sources)
 
@@ -74,11 +74,11 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 | FBOT-03 | Phase 1 | Complete |
 | FBOT-04 | Phase 1 | Complete |
 | FBOT-05 | Phase 1 | Complete |
-| CHAT-01 | Phase 2 | Pending |
-| CHAT-02 | Phase 2 | Pending |
-| CHAT-03 | Phase 2 | Pending |
-| CHAT-04 | Phase 2 | Pending |
-| CHAT-05 | Phase 2 | Pending |
+| CHAT-01 | Phase 2 | Complete |
+| CHAT-02 | Phase 2 | Complete |
+| CHAT-03 | Phase 2 | Complete |
+| CHAT-04 | Phase 2 | Complete |
+| CHAT-05 | Phase 2 | Complete |
 | NEWS-01 | Phase 3 | Pending |
 | NEWS-02 | Phase 3 | Pending |
 | NEWS-03 | Phase 3 | Pending |
@@ -97,4 +97,4 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-09 after Phase 1 completion*
+*Last updated: 2026-02-09 after Phase 2 completion*

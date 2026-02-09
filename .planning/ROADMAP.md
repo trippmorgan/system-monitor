@@ -13,7 +13,7 @@ This upgrade fixes three broken data pipelines in Radio Free Albany and verifies
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Fix FaceBot Server** - Repair the FaceBot Express server so it starts and serves its API
-- [ ] **Phase 2: Wire BotSpace Chat Panel** - Connect the dashboard chat UI to the running FaceBot API
+- [x] **Phase 2: Wire BotSpace Chat Panel** - Connect the dashboard chat UI to the running FaceBot API
 - [ ] **Phase 3: Fix News Fetcher** - Replace grep RSS parsing with Python XML and add local Albany sources
 - [ ] **Phase 4: Verify Arcade Dashboard** - End-to-end verification that all panels render at localhost:8787
 
@@ -56,7 +56,7 @@ Plans:
 - Polling without backoff hammers a down server every 5 seconds (Pitfall 7)
 
 Plans:
-- [ ] 02-01-PLAN.md — Rewrite loadChat/postChat with FaceBot API fetch, XSS prevention, backoff polling, and Enter key support
+- [x] 02-01-PLAN.md — Rewrite loadChat/postChat with FaceBot API fetch, XSS prevention, backoff polling, and Enter key support
 
 ### Phase 3: Fix News Fetcher
 **Goal**: The news fetcher reliably pulls local Albany, GA news from real sources and produces valid JSON with working article links
@@ -101,10 +101,10 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Fix FaceBot Server | 1/1 | ✓ Complete | 2026-02-09 |
-| 2. Wire BotSpace Chat Panel | 0/1 | Not started | - |
+| 2. Wire BotSpace Chat Panel | 1/1 | ✓ Complete | 2026-02-09 |
 | 3. Fix News Fetcher | 0/1 | Not started | - |
 | 4. Verify Arcade Dashboard | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-09 after Phase 2 planning*
+*Last updated: 2026-02-09 after Phase 2 completion*
