@@ -83,14 +83,14 @@ Plans:
 **Goal**: The full Radio Free Albany dashboard loads and renders all panels correctly at localhost:8787
 **Depends on**: Phases 1, 2, 3 (all fixes must be in place for end-to-end verification)
 **Requirements**: DASH-01, DASH-02, DASH-03
+**Plans:** 1 plan
 **Success Criteria** (what must be TRUE):
   1. `dashboard/index.html` renders with the NES.css 8-bit arcade theme (pixel fonts, retro styling visible)
   2. `dashboard/launch.sh` starts the HTTP server and refresh loop without errors, and `stop.sh` cleanly shuts both down
   3. Opening `http://localhost:8787` in a browser shows system stats, news panels, radio player, and BotSpace chat all rendering together
-**Plans**: TBD
 
 Plans:
-- [ ] 04-01: End-to-end dashboard verification and smoke test
+- [ ] 04-01-PLAN.md — Fix config.sh/stop.sh paths and end-to-end dashboard verification
 
 ## Progress
 
@@ -107,4 +107,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-09 after Phase 3 completion*
+*Last updated: 2026-02-09 after Phase 4 planning*
