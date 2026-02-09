@@ -42,13 +42,13 @@ Plans:
 **Goal**: The BotSpace panel in the dashboard displays live chat messages from FaceBot and accepts user input
 **Depends on**: Phase 1 (FaceBot must be running at localhost:4000)
 **Requirements**: CHAT-01, CHAT-02, CHAT-03, CHAT-04, CHAT-05
+**Plans:** 1 plan
 **Success Criteria** (what must be TRUE):
   1. BotSpace panel in the dashboard shows messages from FaceBot /api/feed, refreshing every 5 seconds
   2. Typing a message and clicking SEND posts it to FaceBot as user "tripp" and it appears in the feed
   3. When FaceBot is not running, BotSpace panel shows "FACEBOT OFFLINE" instead of a blank or broken panel
   4. Posting a message containing `<b>test</b>` displays the literal text, not bold formatting (XSS prevention confirmed)
   5. New messages cause the chat panel to scroll to the bottom automatically
-**Plans**: TBD
 
 **Risk flags:**
 - innerHTML XSS when rendering backend messages -- must use escapeHtml() or textContent (Pitfall 3)
@@ -56,7 +56,7 @@ Plans:
 - Polling without backoff hammers a down server every 5 seconds (Pitfall 7)
 
 Plans:
-- [ ] 02-01: Connect BotSpace chat panel to FaceBot API endpoints
+- [ ] 02-01-PLAN.md — Rewrite loadChat/postChat with FaceBot API fetch, XSS prevention, backoff polling, and Enter key support
 
 ### Phase 3: Fix News Fetcher
 **Goal**: The news fetcher reliably pulls local Albany, GA news from real sources and produces valid JSON with working article links
@@ -107,4 +107,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-09 after Phase 1 completion*
+*Last updated: 2026-02-09 after Phase 2 planning*
