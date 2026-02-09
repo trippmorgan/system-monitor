@@ -81,10 +81,12 @@ UPTIME_DAYS=$(awk '{print int($1/86400)}' /proc/uptime)
 NET_CONN=$(ss -tun | grep -c ESTAB 2>/dev/null || echo "0")
 
 # Service status checks via systemctl
-DOCKER=$(systemctl is-active docker 2>/dev/null || echo "unknown")
-POSTGRES=$(systemctl is-active postgresql@14-main 2>/dev/null || echo "unknown")
-OLLAMA=$(systemctl is-active ollama 2>/dev/null || echo "unknown")
-SSH=$(systemctl is-active ssh 2>/dev/null || echo "unknown")
+# Note: systemctl is-active returns non-zero for inactive services,
+# so we capture output first and only fall back to "unknown" if empty
+DOCKER=$(systemctl is-active docker 2>/dev/null) ; [ -z "$DOCKER" ] && DOCKER="unknown"
+POSTGRES=$(systemctl is-active postgresql@14-main 2>/dev/null) ; [ -z "$POSTGRES" ] && POSTGRES="unknown"
+OLLAMA=$(systemctl is-active ollama 2>/dev/null) ; [ -z "$OLLAMA" ] && OLLAMA="unknown"
+SSH=$(systemctl is-active ssh 2>/dev/null) ; [ -z "$SSH" ] && SSH="unknown"
 
 # Alert count and recent alerts (pipe-delimited for dashboard)
 ALERT_COUNT=$(wc -l < "$ALERT_LOG" 2>/dev/null || echo "0")
