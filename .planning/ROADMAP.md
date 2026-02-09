@@ -12,7 +12,7 @@ This upgrade fixes three broken data pipelines in Radio Free Albany and verifies
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Fix FaceBot Server** - Repair the FaceBot Express server so it starts and serves its API
+- [x] **Phase 1: Fix FaceBot Server** - Repair the FaceBot Express server so it starts and serves its API
 - [ ] **Phase 2: Wire BotSpace Chat Panel** - Connect the dashboard chat UI to the running FaceBot API
 - [ ] **Phase 3: Fix News Fetcher** - Replace grep RSS parsing with Python XML and add local Albany sources
 - [ ] **Phase 4: Verify Arcade Dashboard** - End-to-end verification that all panels render at localhost:8787
@@ -36,7 +36,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - `activitypub-express` in package.json is unused and may block npm install (Pitfall 12)
 
 Plans:
-- [ ] 01-01-PLAN.md — Fix dependencies, uuid replacement, agent seeding, and startup race condition
+- [x] 01-01-PLAN.md — Fix dependencies, uuid replacement, agent seeding, and startup race condition
 
 ### Phase 2: Wire BotSpace Chat Panel
 **Goal**: The BotSpace panel in the dashboard displays live chat messages from FaceBot and accepts user input
@@ -100,11 +100,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fix FaceBot Server | 0/1 | Planning complete | - |
+| 1. Fix FaceBot Server | 1/1 | ✓ Complete | 2026-02-09 |
 | 2. Wire BotSpace Chat Panel | 0/1 | Not started | - |
 | 3. Fix News Fetcher | 0/1 | Not started | - |
 | 4. Verify Arcade Dashboard | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-08*
-*Last updated: 2026-02-08*
+*Last updated: 2026-02-09 after Phase 1 completion*

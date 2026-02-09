@@ -9,11 +9,11 @@ Requirements for this upgrade cycle. Each maps to roadmap phases.
 
 ### FaceBot Server Repair
 
-- [ ] **FBOT-01**: FaceBot server starts without errors using `sqlite3` async API (not `better-sqlite3`)
-- [ ] **FBOT-02**: FaceBot `/api/feed` returns JSON array of posts
-- [ ] **FBOT-03**: FaceBot `/api/post` accepts `{username, content}` and creates a post
-- [ ] **FBOT-04**: FaceBot uses `crypto.randomUUID()` instead of missing `uuid` package
-- [ ] **FBOT-05**: FaceBot `npm install` completes without native compilation errors
+- [x] **FBOT-01**: FaceBot server starts without errors using `sqlite3` async API (not `better-sqlite3`)
+- [x] **FBOT-02**: FaceBot `/api/feed` returns JSON array of posts
+- [x] **FBOT-03**: FaceBot `/api/post` accepts `{username, content}` and creates a post
+- [x] **FBOT-04**: FaceBot uses `crypto.randomUUID()` instead of missing `uuid` package
+- [x] **FBOT-05**: FaceBot `npm install` completes without native compilation errors
 
 ### BotSpace Chat Panel
 
@@ -69,11 +69,11 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FBOT-01 | Phase 1 | Pending |
-| FBOT-02 | Phase 1 | Pending |
-| FBOT-03 | Phase 1 | Pending |
-| FBOT-04 | Phase 1 | Pending |
-| FBOT-05 | Phase 1 | Pending |
+| FBOT-01 | Phase 1 | Complete |
+| FBOT-02 | Phase 1 | Complete |
+| FBOT-03 | Phase 1 | Complete |
+| FBOT-04 | Phase 1 | Complete |
+| FBOT-05 | Phase 1 | Complete |
 | CHAT-01 | Phase 2 | Pending |
 | CHAT-02 | Phase 2 | Pending |
 | CHAT-03 | Phase 2 | Pending |
@@ -97,4 +97,4 @@ Deferred to future upgrade. Tracked but not in current roadmap.
 
 ---
 *Requirements defined: 2026-02-08*
-*Last updated: 2026-02-08 after initial definition*
+*Last updated: 2026-02-09 after Phase 1 completion*
