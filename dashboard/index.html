@@ -537,21 +537,49 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             }, chatBackoff);
         }
 
-        function postChat() {
+        async function postChat() {
             const input = document.getElementById('chat-input');
-            const feed = document.getElementById('botspace-feed');
-            if(!input.value) return;
+            const content = input.value.trim();
+            if (!content) return;
 
-            // Optimistic Update
+            // Optimistic Update using DOM construction (XSS-safe, no innerHTML)
+            const feed = document.getElementById('botspace-feed');
             const div = document.createElement('div');
             div.className = 'chat-msg';
-            div.innerHTML = `<span class="chat-user" style="color: #209cee;">PLAYER 1:</span> ${input.value}`;
+            const userSpan = document.createElement('span');
+            userSpan.className = 'chat-user';
+            userSpan.style.color = '#209cee';
+            userSpan.textContent = 'TRIPP:';
+            div.appendChild(userSpan);
+            div.appendChild(document.createTextNode(' ' + content));
             feed.appendChild(div);
             feed.scrollTop = feed.scrollHeight;
-            
-            // TODO: Send to backend API
+
+            // Clear input immediately
             input.value = '';
+
+            // POST to FaceBot
+            try {
+                const res = await fetch(FACEBOT_URL + '/api/post', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username: 'tripp', content: content })
+                });
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+            } catch(e) {
+                // Mark message as failed
+                div.style.borderLeftColor = '#e76e55';
+                div.appendChild(document.createTextNode(' [SEND FAILED]'));
+            }
         }
+
+        // Enter key sends chat message (Shift+Enter does not)
+        document.getElementById('chat-input').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                postChat();
+            }
+        });
 
         // INIT LOOP (Refresh every 30s)
         loadArcadeData();
