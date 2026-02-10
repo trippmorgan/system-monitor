@@ -238,6 +238,17 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             background: #311;
         }
 
+        .chat-msg.warning {
+            border-left-color: var(--accent-yellow);
+            background: #332;
+        }
+
+        .chat-time {
+            float: right;
+            color: #666;
+            font-size: 0.55rem;
+        }
+
         .chat-user {
             color: var(--accent-yellow);
             font-weight: bold;
@@ -368,6 +379,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
         const statusDisplay = document.getElementById('radio-status');
 
         const FACEBOT_URL = 'http://localhost:4000';
+        const FACEBOT_API_KEY = '5c8abbc3e9f3cc36cecf9577c06571f7495acdf301833299a90962004744cc64';
         let chatBackoff = 5000;
         let chatTimer = null;
 
@@ -488,11 +500,31 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
 
         let chatFirstLoad = true;
 
+        function renderMessage(msg) {
+            const severityClass = msg.severity === 'alert' ? 'alert'
+                                : msg.severity === 'warning' ? 'warning'
+                                : '';
+
+            const borderColor = msg.color || 'var(--accent-blue)';
+            const nameColor = msg.color || 'var(--accent-yellow)';
+            const icon = msg.icon ? escapeHtml(msg.icon) + ' ' : '';
+            const timeAgo = msg.time_ago ? `<span class="chat-time">${escapeHtml(msg.time_ago)}</span>` : '';
+
+            return `
+                <div class="chat-msg ${severityClass}" style="border-left-color: ${borderColor}">
+                    <span class="chat-user" style="color: ${nameColor}">${icon}${escapeHtml(msg.name || msg.username)}:</span>
+                    ${escapeHtml(msg.content)}
+                    ${timeAgo}
+                </div>
+            `;
+        }
+
         async function loadChat() {
             try {
                 const res = await fetch(FACEBOT_URL + '/api/feed');
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                const messages = await res.json();
+                const data = await res.json();
+                const messages = data.posts || [];
 
                 // Reset backoff on success
                 chatBackoff = 5000;
@@ -508,12 +540,8 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
                     return;
                 }
 
-                // FaceBot returns DESC order; reverse for chat (oldest at top)
-                feed.innerHTML = messages.reverse().map(msg => `
-                    <div class="chat-msg ${msg.type === 'Alert' ? 'alert' : ''}">
-                        <span class="chat-user">${escapeHtml(msg.name || msg.username)}:</span> ${escapeHtml(msg.content)}
-                    </div>
-                `).join('');
+                // FaceBot returns DESC order (newest first); reverse for chat display (oldest at top)
+                feed.innerHTML = messages.reverse().map(msg => renderMessage(msg)).join('');
 
                 if (isAtBottom) {
                     feed.scrollTop = feed.scrollHeight;
@@ -521,11 +549,8 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
 
                 chatFirstLoad = false;
             } catch(e) {
-                // Show offline state
                 document.getElementById('botspace-feed').innerHTML =
                     '<div class="chat-msg alert"><span class="chat-user">SYSTEM:</span> FACEBOT OFFLINE</div>';
-
-                // Exponential backoff: 5s -> 10s -> 20s -> 40s -> 60s cap
                 chatBackoff = Math.min(chatBackoff * 2, 60000);
             }
         }
@@ -548,7 +573,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             div.className = 'chat-msg';
             const userSpan = document.createElement('span');
             userSpan.className = 'chat-user';
-            userSpan.style.color = '#209cee';
+            userSpan.style.color = '#EAB308';
             userSpan.textContent = 'TRIPP:';
             div.appendChild(userSpan);
             div.appendChild(document.createTextNode(' ' + content));
@@ -562,7 +587,10 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             try {
                 const res = await fetch(FACEBOT_URL + '/api/post', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-API-Key': FACEBOT_API_KEY
+                    },
                     body: JSON.stringify({ username: 'tripp', content: content })
                 });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
