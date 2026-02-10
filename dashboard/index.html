@@ -299,6 +299,24 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             flex-shrink: 0;
         }
 
+        /* NEW POSTS INDICATOR */
+        .new-posts-bar {
+            display: none;
+            background: var(--accent-blue);
+            color: #000;
+            text-align: center;
+            padding: 6px;
+            font-size: 0.6rem;
+            cursor: pointer;
+            font-family: 'Press Start 2P', monospace;
+            animation: blinker 1.5s linear infinite;
+            margin-bottom: 4px;
+        }
+
+        .new-posts-bar:hover {
+            background: var(--accent-yellow);
+        }
+
         .chat-user {
             color: var(--accent-yellow);
             font-weight: bold;
@@ -594,6 +612,8 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
         }
 
         let chatFirstLoad = true;
+        let lastRenderedPostId = null;
+        let pendingNewPosts = 0;
 
         function renderMessage(msg) {
             const severityClass = msg.severity === 'alert' ? 'alert'
@@ -626,20 +646,37 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
 
                 const feed = document.getElementById('botspace-feed');
 
-                // Check if user is near bottom before updating
-                const isAtBottom = chatFirstLoad || (feed.scrollHeight - feed.scrollTop - feed.clientHeight < 50);
-
                 if (messages.length === 0) {
                     feed.innerHTML = '<div class="chat-msg"><span class="chat-user">SYSTEM:</span> No messages yet. Say something!</div>';
+                    lastRenderedPostId = null;
+                    pendingNewPosts = 0;
+                    hideNewPostsIndicator();
                     chatFirstLoad = false;
                     return;
                 }
 
-                // FaceBot returns DESC order (newest first); reverse for chat display (oldest at top)
-                feed.innerHTML = messages.reverse().map(msg => renderMessage(msg)).join('');
+                // messages[0] is the NEWEST post (DESC order from API)
+                const newestId = messages[0].id;
+
+                const isAtBottom = chatFirstLoad ||
+                    (feed.scrollHeight - feed.scrollTop - feed.clientHeight < 50);
 
                 if (isAtBottom) {
+                    // Render normally, update tracking
+                    feed.innerHTML = messages.reverse().map(msg => renderMessage(msg)).join('');
+                    lastRenderedPostId = newestId;
+                    pendingNewPosts = 0;
+                    hideNewPostsIndicator();
                     feed.scrollTop = feed.scrollHeight;
+                } else {
+                    // User scrolled up -- count new posts, show indicator
+                    if (lastRenderedPostId && newestId !== lastRenderedPostId) {
+                        const oldIndex = messages.findIndex(m => m.id === lastRenderedPostId);
+                        pendingNewPosts = oldIndex === -1 ? messages.length : oldIndex;
+                        if (pendingNewPosts > 0) {
+                            showNewPostsIndicator(pendingNewPosts);
+                        }
+                    }
                 }
 
                 chatFirstLoad = false;
@@ -647,6 +684,34 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
                 document.getElementById('botspace-feed').innerHTML =
                     '<div class="chat-msg alert"><span class="chat-user">SYSTEM:</span> FACEBOT OFFLINE</div>';
                 chatBackoff = Math.min(chatBackoff * 2, 60000);
+            }
+        }
+
+        function showNewPostsIndicator(count) {
+            let indicator = document.getElementById('new-posts-indicator');
+            if (!indicator) {
+                indicator = document.createElement('div');
+                indicator.id = 'new-posts-indicator';
+                indicator.className = 'new-posts-bar';
+                indicator.onclick = function() {
+                    // Force scroll to bottom and re-render
+                    chatFirstLoad = true;
+                    pendingNewPosts = 0;
+                    hideNewPostsIndicator();
+                    loadChat();
+                };
+                // Insert above the feed element
+                const feedEl = document.getElementById('botspace-feed');
+                feedEl.parentNode.insertBefore(indicator, feedEl);
+            }
+            indicator.textContent = count + ' NEW POST' + (count !== 1 ? 'S' : '') + ' - CLICK TO VIEW';
+            indicator.style.display = 'block';
+        }
+
+        function hideNewPostsIndicator() {
+            const indicator = document.getElementById('new-posts-indicator');
+            if (indicator) {
+                indicator.style.display = 'none';
             }
         }
 
@@ -674,6 +739,10 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             div.appendChild(document.createTextNode(' ' + content));
             feed.appendChild(div);
             feed.scrollTop = feed.scrollHeight;
+
+            // Reset indicator since user just posted (they are at bottom)
+            pendingNewPosts = 0;
+            hideNewPostsIndicator();
 
             // Clear input immediately
             input.value = '';
