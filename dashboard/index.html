@@ -13,11 +13,11 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RADIO FREE ALBANY [INSERT COIN]</title>
-    
+
     <!-- NES.css & Fonts -->
     <link href="https://unpkg.com/nes.css@2.3.0/css/nes.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
-    
+
     <style>
         :root {
             --bg-color: #212529;
@@ -32,7 +32,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Press Start 2P', monospace;
-            padding-bottom: 100px; /* Space for fixed player */
+            padding-bottom: 100px;
             margin: 0;
         }
 
@@ -132,8 +132,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             margin-bottom: 20px;
             position: relative;
         }
-        
-        /* NES.css container override for dark theme */
+
         .nes-container.is-dark {
             background-color: #000;
             border-color: #fff;
@@ -167,7 +166,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
 
         .news-link:hover {
             color: var(--accent-yellow);
-            text-decoration: none; 
+            text-decoration: none;
         }
 
         .news-meta {
@@ -216,111 +215,124 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             text-align: center;
         }
 
-        /* BOTSPACE (CHAT) */
-        .botspace-feed {
-            height: 300px;
-            overflow-y: auto;
-            background: #111;
-            padding: 10px;
-            border: 2px inset #555;
-            font-size: 0.7rem;
-        }
+        .blink { animation: blinker 1s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
 
-        .chat-msg {
-            margin-bottom: 8px;
-            padding: 5px;
-            background: #222;
-            border-left: 3px solid var(--accent-blue);
-        }
-
-        .chat-msg.alert {
-            border-left-color: var(--accent-red);
-            background: #311;
-        }
-
-        .chat-msg.warning {
-            border-left-color: var(--accent-yellow);
-            background: #332;
-        }
-
-        .chat-time {
-            float: right;
-            color: #666;
-            font-size: 0.55rem;
-        }
-
-        /* AGENT STATUS CARDS */
-        .agent-card {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px;
-            margin-bottom: 6px;
-            background: #111;
-            border-left: 3px solid #888;
-            font-size: 0.6rem;
-        }
-
-        .agent-card:last-child {
-            margin-bottom: 0;
-        }
-
-        .agent-name {
-            font-weight: bold;
-            flex-shrink: 0;
-        }
-
-        .agent-icon {
-            font-style: normal;
-            flex-shrink: 0;
-        }
-
-        .agent-status-badge {
-            font-size: 0.5rem;
-            padding: 2px 4px;
-            border: 1px solid;
-        }
-
-        .agent-status-badge.online {
-            color: var(--accent-green);
-            border-color: var(--accent-green);
-        }
-
-        .agent-status-badge.offline {
-            color: #666;
-            border-color: #444;
-        }
-
-        .agent-seen {
-            color: #888;
-            font-size: 0.5rem;
-            margin-left: auto;
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-        /* NEW POSTS INDICATOR */
-        .new-posts-bar {
-            display: none;
-            background: var(--accent-blue);
-            color: #000;
-            text-align: center;
-            padding: 6px;
-            font-size: 0.6rem;
-            cursor: pointer;
-            font-family: 'Press Start 2P', monospace;
-            animation: blinker 1.5s linear infinite;
-            margin-bottom: 4px;
-        }
-
-        .new-posts-bar:hover {
-            background: var(--accent-yellow);
-        }
-
-        .chat-user {
+        /* DJ CHAT WIDGET */
+        .dj-toggle-btn {
+            position: fixed;
+            bottom: 70px;
+            right: 20px;
+            z-index: 10001;
+            background: #000;
             color: var(--accent-yellow);
-            font-weight: bold;
+            border: 4px solid var(--accent-yellow);
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.7rem;
+            padding: 10px 14px;
+            cursor: pointer;
+            image-rendering: pixelated;
         }
+        .dj-toggle-btn:hover {
+            background: var(--accent-yellow);
+            color: #000;
+        }
+
+        .dj-chat-panel {
+            display: none;
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            width: 380px;
+            height: 450px;
+            z-index: 10001;
+            background: #000;
+            border: 4px solid var(--accent-yellow);
+            flex-direction: column;
+            font-family: 'Press Start 2P', monospace;
+        }
+        .dj-chat-panel.open { display: flex; }
+
+        .dj-header {
+            background: #111;
+            padding: 8px 10px;
+            border-bottom: 2px solid var(--accent-yellow);
+            font-size: 0.6rem;
+            color: var(--accent-yellow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        .dj-header .dj-close {
+            cursor: pointer;
+            color: var(--accent-red);
+            font-size: 0.8rem;
+        }
+
+        .dj-now-playing {
+            background: #0a0a0a;
+            padding: 6px 10px;
+            font-size: 0.5rem;
+            color: var(--accent-green);
+            border-bottom: 1px solid #333;
+            flex-shrink: 0;
+            min-height: 18px;
+        }
+
+        .dj-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+            font-size: 0.55rem;
+            line-height: 1.6;
+        }
+        .dj-messages::-webkit-scrollbar { width: 6px; }
+        .dj-messages::-webkit-scrollbar-track { background: #000; }
+        .dj-messages::-webkit-scrollbar-thumb { background: #444; }
+
+        .dj-msg {
+            margin-bottom: 10px;
+            padding: 6px 8px;
+            border-left: 3px solid #333;
+        }
+        .dj-msg.user { border-left-color: var(--accent-blue); }
+        .dj-msg.user .dj-msg-author { color: var(--accent-blue); }
+        .dj-msg.dj { border-left-color: var(--accent-green); }
+        .dj-msg.dj .dj-msg-author { color: var(--accent-green); }
+        .dj-msg.error { border-left-color: var(--accent-red); color: var(--accent-red); }
+
+        .dj-msg-author {
+            font-size: 0.5rem;
+            margin-bottom: 3px;
+        }
+
+        .dj-input-area {
+            display: flex;
+            border-top: 2px solid var(--accent-yellow);
+            flex-shrink: 0;
+        }
+        .dj-input-area input {
+            flex: 1;
+            background: #111;
+            border: none;
+            color: #fff;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            padding: 10px;
+            outline: none;
+        }
+        .dj-input-area input::placeholder { color: #555; }
+        .dj-input-area button {
+            background: var(--accent-yellow);
+            color: #000;
+            border: none;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 0.55rem;
+            padding: 10px 14px;
+            cursor: pointer;
+        }
+        .dj-input-area button:hover { background: #fff; }
     </style>
 </head>
 <body>
@@ -343,13 +355,13 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
 
         <!-- MAIN GRID -->
         <div class="main-grid">
-            
-            <!-- LEFT COLUMN: LOCAL & STATS -->
+
+            <!-- LEFT COLUMN: SYSTEM VITALS + LOCAL + STATE -->
             <div class="col-left">
                 <!-- SYSTEM VITALS -->
                 <div class="nes-container is-dark with-title">
                     <p class="title">SYSTEM VITALS</p>
-                    
+
                     <div class="stat-row">
                         <div class="stat-label"><span>CPU LOAD</span><span id="cpu-val">--%</span></div>
                         <progress class="nes-progress is-primary" value="0" max="100" id="cpu-bar"></progress>
@@ -371,9 +383,15 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
                     <p class="title">LEVEL 1: LOCAL</p>
                     <div id="news-local">Scanning...</div>
                 </div>
+
+                <!-- STATE NEWS -->
+                <div class="nes-container is-dark with-title" style="margin-top: 20px;">
+                    <p class="title">LEVEL 2: GEORGIA</p>
+                    <div id="news-state">Scanning...</div>
+                </div>
             </div>
 
-            <!-- CENTER COLUMN: MAIN FEED & BOTSPACE -->
+            <!-- CENTER COLUMN: BREAKING + TECH + POLITICS -->
             <div class="col-center">
                 <!-- BREAKING NEWS (BOSS BATTLE) -->
                 <div class="nes-container is-rounded is-dark is-centered" style="border-color: var(--accent-red); margin-bottom: 20px;">
@@ -381,34 +399,43 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
                     <div id="news-breaking">No threats detected.</div>
                 </div>
 
-                <!-- BOTSPACE (FACEBOT) -->
+                <!-- TECH NEWS -->
+                <div class="nes-container is-dark with-title" style="margin-bottom: 20px;">
+                    <p class="title">TECH DUNGEON</p>
+                    <div id="news-tech">Scanning...</div>
+                </div>
+
+                <!-- POLITICS -->
                 <div class="nes-container is-dark with-title">
-                    <p class="title">BOTSPACE BBS</p>
-                    <div class="botspace-feed" id="botspace-feed">
-                        <div class="chat-msg">
-                            <span class="chat-user">SYSTEM:</span> Welcome to BotSpace.
-                        </div>
-                        <div class="chat-msg alert">
-                            <span class="chat-user">SECURITY_BOT:</span> Port 22 scan detected. Shields holding.
-                        </div>
-                        <div class="chat-msg">
-                            <span class="chat-user">FIRST_OFFICER:</span> All systems nominal.
-                        </div>
-                    </div>
-                    <div style="margin-top: 10px; display: flex;">
-                        <input type="text" id="chat-input" class="nes-input is-dark" placeholder="Say something...">
-                        <button class="nes-btn is-primary" onclick="postChat()">SEND</button>
-                    </div>
+                    <p class="title">POLITICS ARENA</p>
+                    <div id="news-politics">Scanning...</div>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: CREW STATUS -->
+            <!-- RIGHT COLUMN: SPORTS + NATURE + FISHING + CONSERVATION -->
             <div class="col-right">
+                <!-- SPORTS -->
                 <div class="nes-container is-dark with-title">
-                    <p class="title">CREW STATUS</p>
-                    <div id="agent-status">
-                        <div style="color: #666; font-size: 0.6rem;">Scanning crew...</div>
-                    </div>
+                    <p class="title">SPORTS ZONE</p>
+                    <div id="news-sports">Scanning...</div>
+                </div>
+
+                <!-- NATURE -->
+                <div class="nes-container is-dark with-title" style="margin-top: 20px;">
+                    <p class="title">NATURE QUEST</p>
+                    <div id="news-nature">Scanning...</div>
+                </div>
+
+                <!-- FISHING & HUNTING -->
+                <div class="nes-container is-dark with-title" style="margin-top: 20px;">
+                    <p class="title">FISHING LOG</p>
+                    <div id="news-fishing">Scanning...</div>
+                </div>
+
+                <!-- CONSERVATION -->
+                <div class="nes-container is-dark with-title" style="margin-top: 20px;">
+                    <p class="title">CONSERVATION</p>
+                    <div id="news-conservation">Scanning...</div>
                 </div>
             </div>
 
@@ -420,7 +447,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
         <button class="nes-btn is-primary" onclick="toggleRadio()">
             <i class="nes-icon play"></i> PLAY
         </button>
-        
+
         <div class="cassette-display">
             <span id="radio-status">READY PLAYER ONE</span>
             <div style="font-size: 0.6rem; color: #666; margin-top: 4px;">STEREO / DOLBY NR</div>
@@ -435,6 +462,24 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
         </audio>
     </div>
 
+    <!-- DJ CHAT TOGGLE BUTTON -->
+    <button class="dj-toggle-btn" id="dj-toggle" onclick="toggleDJChat()">DJ</button>
+
+    <!-- DJ CHAT PANEL -->
+    <div class="dj-chat-panel" id="dj-chat-panel">
+        <div class="dj-header">
+            <span>CLAUDE DJ</span>
+            <span class="dj-close" onclick="toggleDJChat()">X</span>
+        </div>
+        <div class="dj-now-playing" id="dj-now-playing">NOW PLAYING: ---</div>
+        <div class="dj-messages" id="dj-messages"></div>
+        <div class="dj-input-area">
+            <input type="text" id="dj-input" placeholder="Request a song..."
+                   onkeydown="if(event.key==='Enter')sendDJRequest()">
+            <button onclick="sendDJRequest()">SEND</button>
+        </div>
+    </div>
+
     <script>
         //----------------------------------------------------------------------
         // RADIO FREE ALBANY - ARCADE CONTROLLER
@@ -442,11 +487,6 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
         let isPlaying = false;
         const audio = document.getElementById('radio-stream');
         const statusDisplay = document.getElementById('radio-status');
-
-        const FACEBOT_URL = 'http://localhost:4040';
-        const FACEBOT_API_KEY = '5c8abbc3e9f3cc36cecf9577c06571f7495acdf301833299a90962004744cc64';
-        let chatBackoff = 5000;
-        let chatTimer = null;
 
         //----------------------------------------------------------------------
         // RADIO CONTROLS
@@ -456,12 +496,12 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             audio.play().then(() => {
                 isPlaying = true;
                 statusDisplay.textContent = "NOW PLAYING: LIVE BROADCAST";
-                statusDisplay.style.color = "#92cc41"; // Green
+                statusDisplay.style.color = "#92cc41";
                 statusDisplay.classList.add('blink');
             }).catch(e => {
                 console.error('Radio Error:', e);
                 statusDisplay.textContent = "INSERT COIN (ERROR)";
-                statusDisplay.style.color = "#e76e55"; // Red
+                statusDisplay.style.color = "#e76e55";
             });
         }
 
@@ -488,13 +528,13 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
                     document.getElementById('cpu-bar').value = cpuVal;
                     document.getElementById('cpu-val').textContent = cpuVal + "%";
                 }
-                
+
                 if(stats.memory) {
                     const memVal = parseInt(stats.memory.percent) || 0;
                     document.getElementById('mem-bar').value = memVal;
                     document.getElementById('mem-val').textContent = memVal + "%";
                 }
-                
+
                 if(stats.disk) {
                     const diskVal = parseInt(stats.disk.percent) || 0;
                     document.getElementById('disk-bar').value = diskVal;
@@ -503,107 +543,49 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
 
                 // Header Stats
                 const uptime = stats.uptime?.days || 0;
-                document.querySelector('header p').textContent = `HIGH SCORE: ${uptime} DAYS | CREDIT: ${stats.services?.docker === 'active' ? '01' : '00'}`;
+                const svcCount = stats.services ? Object.values(stats.services).filter(s => s === 'running' || s === 'active').length : 0;
+                document.querySelector('header p').textContent = `UPTIME: ${uptime} DAYS | SERVICES: ${svcCount} ONLINE`;
 
             } catch(e) {
                 console.log("Stats Offline - Using Mock Data");
             }
 
-            // Load News (Levels)
+            // Load News (All Categories)
             try {
                 const newsRes = await fetch('news-cache/news.json?' + Date.now());
                 let allNews = await newsRes.json();
-                
-                // Sort & Filter
+
                 allNews.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                const categories = { local: [], breaking: [], sports: [], nature: [] };
+
+                const categories = {
+                    local: [], state: [], breaking: [], tech: [],
+                    sports: [], nature: [], fishing: [], conservation: [],
+                    politics: []
+                };
 
                 allNews.forEach(item => {
                     const cat = item.category || 'tech';
                     if (categories[cat]) categories[cat].push(item);
                 });
 
-                renderArcadeList('news-local', categories.local, 'NO TARGETS FOUND');
-                renderArcadeList('news-breaking', categories.breaking, 'NO BOSS BATTLE ACTIVE');
+                renderNewsList('news-local', categories.local, 'NO LOCAL INTEL');
+                renderNewsList('news-state', categories.state, 'NO STATE DISPATCHES');
+                renderNewsList('news-breaking', categories.breaking, 'NO BOSS BATTLE ACTIVE');
+                renderNewsList('news-tech', categories.tech, 'TECH DUNGEON EMPTY');
+                renderNewsList('news-sports', categories.sports, 'NO GAME DATA');
+                renderNewsList('news-nature', categories.nature, 'NATURE IS QUIET');
+                renderNewsList('news-fishing', categories.fishing, 'NO FISH REPORTS');
+                renderNewsList('news-conservation', categories.conservation, 'NO CONSERVATION NEWS');
+                renderNewsList('news-politics', categories.politics, 'NO POLITICAL BATTLES');
+
+                // Build ticker from top headlines
+                buildTicker(allNews);
 
             } catch(e) {
                 console.log("News Offline");
             }
         }
 
-        function renderArcadeList(elementId, items, emptyMsg) {
-            const el = document.getElementById(elementId);
-            if (!items || items.length === 0) {
-                el.innerHTML = `<div style="color: #666; font-size: 0.6rem;">${emptyMsg}</div>`;
-                return;
-            }
-            
-            // Limit to top 5 items per box
-            el.innerHTML = items.slice(0, 5).map(item => `
-                <div class="news-item">
-                    <a href="${item.url || '#'}" target="_blank" class="news-link">
-                        <i class="nes-icon coin is-small"></i> ${item.title}
-                    </a>
-                    <div class="news-meta">
-                        SCORE: ${Math.abs(item.bias || 0)} | ${item.source}
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        //----------------------------------------------------------------------
-        // CREW STATUS (AGENT HEARTBEATS)
-        //----------------------------------------------------------------------
-        function agentTimeSince(sqliteTimestamp) {
-            if (!sqliteTimestamp) return 'Never';
-            const ms = new Date(sqliteTimestamp + 'Z').getTime();
-            const seconds = Math.floor((Date.now() - ms) / 1000);
-            if (seconds < 60) return 'Just now';
-            if (seconds < 3600) return Math.floor(seconds / 60) + 'm ago';
-            if (seconds < 86400) return Math.floor(seconds / 3600) + 'h ago';
-            return Math.floor(seconds / 86400) + 'd ago';
-        }
-
-        async function loadAgentStatus() {
-            try {
-                const res = await fetch(FACEBOT_URL + '/api/agents');
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const agents = await res.json();
-
-                const panel = document.getElementById('agent-status');
-
-                if (!agents || agents.length === 0) {
-                    panel.innerHTML = '<div style="color: #666; font-size: 0.6rem;">No agents found.</div>';
-                    return;
-                }
-
-                panel.innerHTML = agents.map(agent => {
-                    const lastSeen = agentTimeSince(agent.last_seen);
-                    // Consider "online" if posted within last 10 minutes
-                    const isOnline = agent.last_seen &&
-                        (Date.now() - new Date(agent.last_seen + 'Z').getTime()) < 600000;
-                    const statusClass = isOnline ? 'online' : 'offline';
-                    const statusText = isOnline ? 'ON' : 'OFF';
-                    const agentColor = agent.color || '#888';
-
-                    return `
-                        <div class="agent-card" style="border-left-color: ${agentColor}">
-                            <span class="agent-icon">${escapeHtml(agent.icon || '')}</span>
-                            <span class="agent-name" style="color: ${agentColor}">${escapeHtml(agent.name || agent.username)}</span>
-                            <span class="agent-status-badge ${statusClass}">${statusText}</span>
-                            <span class="agent-seen">${escapeHtml(lastSeen)}</span>
-                        </div>
-                    `;
-                }).join('');
-            } catch(e) {
-                document.getElementById('agent-status').innerHTML =
-                    '<div style="color: #666; font-size: 0.6rem;">CREW COMMS OFFLINE</div>';
-            }
-        }
-
-        //----------------------------------------------------------------------
-        // BOTSPACE (CHAT)
-        //----------------------------------------------------------------------
         function escapeHtml(str) {
             if (str == null) return '';
             const div = document.createElement('div');
@@ -611,182 +593,134 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             return div.innerHTML;
         }
 
-        let chatFirstLoad = true;
-        let lastRenderedPostId = null;
-        let pendingNewPosts = 0;
+        function renderNewsList(elementId, items, emptyMsg) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            if (!items || items.length === 0) {
+                el.innerHTML = `<div style="color: #666; font-size: 0.6rem;">${emptyMsg}</div>`;
+                return;
+            }
 
-        function renderMessage(msg) {
-            const severityClass = msg.severity === 'alert' ? 'alert'
-                                : msg.severity === 'warning' ? 'warning'
-                                : '';
-
-            const borderColor = msg.color || 'var(--accent-blue)';
-            const nameColor = msg.color || 'var(--accent-yellow)';
-            const icon = msg.icon ? escapeHtml(msg.icon) + ' ' : '';
-            const timeAgo = msg.time_ago ? `<span class="chat-time">${escapeHtml(msg.time_ago)}</span>` : '';
-
-            return `
-                <div class="chat-msg ${severityClass}" style="border-left-color: ${borderColor}">
-                    <span class="chat-user" style="color: ${nameColor}">${icon}${escapeHtml(msg.name || msg.username)}:</span>
-                    ${escapeHtml(msg.content)}
-                    ${timeAgo}
+            el.innerHTML = items.slice(0, 6).map(item => `
+                <div class="news-item">
+                    <a href="${escapeHtml(item.url || '#')}" target="_blank" class="news-link">
+                        <i class="nes-icon coin is-small"></i> ${escapeHtml(item.title)}
+                    </a>
+                    <div class="news-meta">
+                        ${escapeHtml(item.source)} | ${escapeHtml(item.bias_label || '')}
+                    </div>
                 </div>
-            `;
+            `).join('');
         }
 
-        async function loadChat() {
-            try {
-                const res = await fetch(FACEBOT_URL + '/api/feed');
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                const messages = data.posts || [];
+        function buildTicker(allNews) {
+            const ticker = document.getElementById('top-ticker');
+            if (!allNews || allNews.length === 0) return;
 
-                // Reset backoff on success
-                chatBackoff = 5000;
+            const headlines = allNews.slice(0, 15).map(item =>
+                `<span class="ticker-item"><i class="nes-icon coin is-small"></i> ${escapeHtml(item.title)}</span>`
+            ).join('');
 
-                const feed = document.getElementById('botspace-feed');
-
-                if (messages.length === 0) {
-                    feed.innerHTML = '<div class="chat-msg"><span class="chat-user">SYSTEM:</span> No messages yet. Say something!</div>';
-                    lastRenderedPostId = null;
-                    pendingNewPosts = 0;
-                    hideNewPostsIndicator();
-                    chatFirstLoad = false;
-                    return;
-                }
-
-                // messages[0] is the NEWEST post (DESC order from API)
-                const newestId = messages[0].id;
-
-                const isAtBottom = chatFirstLoad ||
-                    (feed.scrollHeight - feed.scrollTop - feed.clientHeight < 50);
-
-                if (isAtBottom) {
-                    // Render normally, update tracking
-                    feed.innerHTML = messages.reverse().map(msg => renderMessage(msg)).join('');
-                    lastRenderedPostId = newestId;
-                    pendingNewPosts = 0;
-                    hideNewPostsIndicator();
-                    feed.scrollTop = feed.scrollHeight;
-                } else {
-                    // User scrolled up -- count new posts, show indicator
-                    if (lastRenderedPostId && newestId !== lastRenderedPostId) {
-                        const oldIndex = messages.findIndex(m => m.id === lastRenderedPostId);
-                        pendingNewPosts = oldIndex === -1 ? messages.length : oldIndex;
-                        if (pendingNewPosts > 0) {
-                            showNewPostsIndicator(pendingNewPosts);
-                        }
-                    }
-                }
-
-                chatFirstLoad = false;
-            } catch(e) {
-                document.getElementById('botspace-feed').innerHTML =
-                    '<div class="chat-msg alert"><span class="chat-user">SYSTEM:</span> FACEBOT OFFLINE</div>';
-                chatBackoff = Math.min(chatBackoff * 2, 60000);
-            }
+            ticker.innerHTML = headlines;
         }
-
-        function showNewPostsIndicator(count) {
-            let indicator = document.getElementById('new-posts-indicator');
-            if (!indicator) {
-                indicator = document.createElement('div');
-                indicator.id = 'new-posts-indicator';
-                indicator.className = 'new-posts-bar';
-                indicator.onclick = function() {
-                    // Force scroll to bottom and re-render
-                    chatFirstLoad = true;
-                    pendingNewPosts = 0;
-                    hideNewPostsIndicator();
-                    loadChat();
-                };
-                // Insert above the feed element
-                const feedEl = document.getElementById('botspace-feed');
-                feedEl.parentNode.insertBefore(indicator, feedEl);
-            }
-            indicator.textContent = count + ' NEW POST' + (count !== 1 ? 'S' : '') + ' - CLICK TO VIEW';
-            indicator.style.display = 'block';
-        }
-
-        function hideNewPostsIndicator() {
-            const indicator = document.getElementById('new-posts-indicator');
-            if (indicator) {
-                indicator.style.display = 'none';
-            }
-        }
-
-        function scheduleChatPoll() {
-            chatTimer = setTimeout(async () => {
-                await loadChat();
-                scheduleChatPoll();
-            }, chatBackoff);
-        }
-
-        async function postChat() {
-            const input = document.getElementById('chat-input');
-            const content = input.value.trim();
-            if (!content) return;
-
-            // Optimistic Update using DOM construction (XSS-safe, no innerHTML)
-            const feed = document.getElementById('botspace-feed');
-            const div = document.createElement('div');
-            div.className = 'chat-msg';
-            const userSpan = document.createElement('span');
-            userSpan.className = 'chat-user';
-            userSpan.style.color = '#EAB308';
-            userSpan.textContent = 'TRIPP:';
-            div.appendChild(userSpan);
-            div.appendChild(document.createTextNode(' ' + content));
-            feed.appendChild(div);
-            feed.scrollTop = feed.scrollHeight;
-
-            // Reset indicator since user just posted (they are at bottom)
-            pendingNewPosts = 0;
-            hideNewPostsIndicator();
-
-            // Clear input immediately
-            input.value = '';
-
-            // POST to FaceBot
-            try {
-                const res = await fetch(FACEBOT_URL + '/api/post', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-API-Key': FACEBOT_API_KEY
-                    },
-                    body: JSON.stringify({ username: 'tripp', content: content })
-                });
-                if (!res.ok) throw new Error('HTTP ' + res.status);
-            } catch(e) {
-                // Mark message as failed
-                div.style.borderLeftColor = '#e76e55';
-                div.appendChild(document.createTextNode(' [SEND FAILED]'));
-            }
-        }
-
-        // Enter key sends chat message (Shift+Enter does not)
-        document.getElementById('chat-input').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                postChat();
-            }
-        });
 
         // INIT LOOP (Refresh every 30s)
         loadArcadeData();
-        loadAgentStatus();
-        setInterval(() => { loadArcadeData(); loadAgentStatus(); }, 30000);
+        setInterval(loadArcadeData, 30000);
 
-        // Chat Loop (recursive setTimeout with backoff)
-        loadChat();
-        scheduleChatPoll();
+        //----------------------------------------------------------------------
+        // DJ CHAT SYSTEM
+        //----------------------------------------------------------------------
+        let djChatOpen = false;
+        let djPollTimer = null;
+
+        function toggleDJChat() {
+            djChatOpen = !djChatOpen;
+            const panel = document.getElementById('dj-chat-panel');
+            panel.classList.toggle('open', djChatOpen);
+            if (djChatOpen) {
+                loadDJHistory();
+                refreshNowPlaying();
+                djPollTimer = setInterval(refreshNowPlaying, 15000);
+                document.getElementById('dj-input').focus();
+            } else {
+                if (djPollTimer) clearInterval(djPollTimer);
+                djPollTimer = null;
+            }
+        }
+
+        function appendDJMessage(role, text) {
+            const container = document.getElementById('dj-messages');
+            const div = document.createElement('div');
+            div.className = 'dj-msg ' + role;
+            const authorLabel = role === 'user' ? 'YOU' : role === 'dj' ? 'DJ' : 'SYSTEM';
+            div.innerHTML = '<div class="dj-msg-author">' + authorLabel + '</div>' +
+                            '<div>' + escapeHtml(text) + '</div>';
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        async function sendDJRequest() {
+            const input = document.getElementById('dj-input');
+            const text = input.value.trim();
+            if (!text) return;
+            input.value = '';
+
+            appendDJMessage('user', text);
+
+            try {
+                const res = await fetch('/api/dj/request', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({message: text}),
+                });
+                const data = await res.json();
+                if (data.error) {
+                    appendDJMessage('error', data.error);
+                } else {
+                    appendDJMessage('dj', data.reply);
+                }
+                // Refresh now-playing shortly after a queue
+                setTimeout(refreshNowPlaying, 3000);
+            } catch (e) {
+                appendDJMessage('error', 'CONNECTION LOST: ' + e.message);
+            }
+        }
+
+        async function refreshNowPlaying() {
+            try {
+                const res = await fetch('/api/dj/now-playing');
+                const data = await res.json();
+                const el = document.getElementById('dj-now-playing');
+                if (data.now_playing) {
+                    el.textContent = 'NOW: ' + data.now_playing.title + ' - ' + data.now_playing.artist;
+                } else {
+                    el.textContent = 'NOW PLAYING: ---';
+                }
+            } catch (e) {
+                // silent fail
+            }
+        }
+
+        async function loadDJHistory() {
+            try {
+                const res = await fetch('/api/dj/history?limit=50');
+                const data = await res.json();
+                const container = document.getElementById('dj-messages');
+                container.innerHTML = '';
+                if (data.messages) {
+                    data.messages.forEach(function(m) {
+                        appendDJMessage(m.role, m.text);
+                    });
+                }
+                if (!data.messages || data.messages.length === 0) {
+                    appendDJMessage('dj', 'INSERT COIN! Request any song from the library.');
+                }
+            } catch (e) {
+                appendDJMessage('dj', 'INSERT COIN! Request any song from the library.');
+            }
+        }
 
     </script>
-
-    <style>
-        .blink { animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
-    </style>
 </body>
 </html>
