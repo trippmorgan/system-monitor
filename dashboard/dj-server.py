@@ -154,10 +154,12 @@ def search_tracks(term, artist_hint):
             log.info("  Tier 3 HIT: %d results, best: %s - %s", len(rows), rows[0][1], rows[0][2])
             return _row_to_dict(rows[0]), 3
 
-        # Tier 3b: word-split fallback — match ALL words
+        # Tier 3b: word-split fallback — match ALL words in title
         words = term.split()
+        stop_words = {"a", "an", "the", "of", "and", "or", "in", "on", "to", "for", "is", "it", "as", "we", "i"}
+        significant_words = [w for w in words if w.lower() not in stop_words and len(w) > 1]
         if len(words) > 1:
-            log.info("  Tier 3b: word-split %r", words)
+            log.info("  Tier 3b: word-split title %r", words)
             like_clauses = " AND ".join(["LOWER(Title) LIKE ?"] * len(words))
             params = [f"%{w.lower()}%" for w in words]
             cursor.execute(
@@ -171,19 +173,72 @@ def search_tracks(term, artist_hint):
                 log.info("  Tier 3b HIT: %d results, best: %s - %s", len(rows), rows[0][1], rows[0][2])
                 return _row_to_dict(rows[0]), 3
 
+        # Tier 3c: word-split across BOTH title and artist (handles "rem end of the world")
+        # Also try apostrophe variants (its -> it's, dont -> don't)
+        search_words = list(significant_words)
+        for w in significant_words:
+            wl = w.lower()
+            if wl == "its":
+                search_words.append("it's")
+            elif wl == "dont":
+                search_words.append("don't")
+            elif wl == "cant":
+                search_words.append("can't")
+            elif wl == "wont":
+                search_words.append("won't")
+            elif wl == "youre":
+                search_words.append("you're")
+            # Acronym expansion: "rem" -> "r.e.m."
+            if len(w) <= 5 and w.isalpha():
+                search_words.append(".".join(w.upper()) + ".")
+        # Deduplicate while preserving order
+        seen = set()
+        unique_words = []
+        for w in search_words:
+            wl = w.lower()
+            if wl not in seen:
+                seen.add(wl)
+                unique_words.append(w)
+
+        if len(unique_words) >= 2:
+            log.info("  Tier 3c: word-split title+artist %r", unique_words)
+            like_clauses = " AND ".join(
+                [f"(LOWER(Title) LIKE ? OR LOWER(Artist) LIKE ?)"] * len(unique_words)
+            )
+            params = []
+            for w in unique_words:
+                params.extend([f"%{w.lower()}%", f"%{w.lower()}%"])
+            cursor.execute(
+                f"SELECT TOP 5 {SELECT_COLS} "
+                f"FROM Audio WHERE {base_where} AND {like_clauses} "
+                f"ORDER BY Plays DESC",
+                params,
+            )
+            rows = cursor.fetchall()
+            if rows:
+                log.info("  Tier 3c HIT: %d results, best: %s - %s", len(rows), rows[0][1], rows[0][2])
+                return _row_to_dict(rows[0]), 3
+
         # --- Tier 4: Artist-only match (most-played) ---
         artist_search = artist_hint or term
-        log.info("  Tier 4: artist-only LIKE %%%s%%", artist_search)
-        cursor.execute(
-            f"SELECT TOP 1 {SELECT_COLS} "
-            f"FROM Audio WHERE {base_where} AND LOWER(Artist) LIKE ? "
-            f"ORDER BY Plays DESC",
-            (f"%{artist_search.lower()}%",),
-        )
-        row = cursor.fetchone()
-        if row:
-            log.info("  Tier 4 HIT: %s - %s", row[1], row[2])
-            return _row_to_dict(row), 4
+        # Build artist search variants: "rem" -> also try "r.e.m." style
+        artist_variants = [artist_search]
+        for w in ([artist_search] + words):
+            if len(w) <= 5 and w.isalpha():
+                dotted = ".".join(w.upper()) + "."
+                artist_variants.append(dotted)
+        for av in artist_variants:
+            log.info("  Tier 4: artist-only LIKE %%%s%%", av)
+            cursor.execute(
+                f"SELECT TOP 1 {SELECT_COLS} "
+                f"FROM Audio WHERE {base_where} AND LOWER(Artist) LIKE ? "
+                f"ORDER BY Plays DESC",
+                (f"%{av.lower()}%",),
+            )
+            row = cursor.fetchone()
+            if row:
+                log.info("  Tier 4 HIT: %s - %s", row[1], row[2])
+                return _row_to_dict(row), 4
 
         # --- Tier 5: Random from rotation categories ---
         log.info("  Tier 5: random from rotation categories %s", ROTATION_CATEGORIES)
