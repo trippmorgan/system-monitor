@@ -41,15 +41,12 @@ MAX_HISTORY = 200
 rate_limit = {}             # ip -> last_request_time
 RATE_LIMIT_SECONDS = 3
 
-# Rotation category IDs for tier-5 fallback (decade buckets, etc.)
-ROTATION_CATEGORIES = [
-    "60s", "70s", "80s", "90s", "00s", "2000s", "2010s", "2020s",
-    "Gold", "Recurrent", "Hot", "Power",
-]
+# Rotation category IDs (int) for tier-5 fallback — top categories by track count
+ROTATION_CATEGORIES = [44, 38, 125, 36, 74, 93, 37, 43, 109, 35, 117, 68, 88]
 
 # Prefixes to strip from user input
 REQUEST_PREFIXES = re.compile(
-    r"^(can you |could you |please |play |put on |queue |spin |throw on |drop |hit me with )+",
+    r"^(can you |could you |please |play |put on |queue |spin |throw on |drop |hit me with |some |any |a little )+",
     re.IGNORECASE,
 )
 
@@ -111,23 +108,29 @@ def search_tracks(term, artist_hint):
 
     cursor = conn.cursor()
     base_where = "Type = 16 AND (Deleted = 0 OR Deleted IS NULL)"
+    SELECT_COLS = "UID, Title, Artist, Album, [Length], Plays, Category"
+
+    log.info("SEARCH: term=%r artist_hint=%r", term, artist_hint)
 
     try:
         # --- Tier 1: Exact title match ---
+        log.info("  Tier 1: exact title match for %r", term)
         cursor.execute(
-            f"SELECT TOP 1 uid, Title, Artist, Album, Duration, Plays, CatID "
+            f"SELECT TOP 1 {SELECT_COLS} "
             f"FROM Audio WHERE {base_where} AND LOWER(Title) = LOWER(?) "
             f"ORDER BY Plays DESC",
             (term,),
         )
         row = cursor.fetchone()
         if row:
+            log.info("  Tier 1 HIT: %s - %s", row[1], row[2])
             return _row_to_dict(row), 1
 
         # --- Tier 2: Artist hint + partial title ---
         if artist_hint:
+            log.info("  Tier 2: artist=%r + title=%r", artist_hint, term)
             cursor.execute(
-                f"SELECT TOP 1 uid, Title, Artist, Album, Duration, Plays, CatID "
+                f"SELECT TOP 1 {SELECT_COLS} "
                 f"FROM Audio WHERE {base_where} "
                 f"AND LOWER(Artist) LIKE ? AND LOWER(Title) LIKE ? "
                 f"ORDER BY Plays DESC",
@@ -135,67 +138,79 @@ def search_tracks(term, artist_hint):
             )
             row = cursor.fetchone()
             if row:
+                log.info("  Tier 2 HIT: %s - %s", row[1], row[2])
                 return _row_to_dict(row), 2
 
         # --- Tier 3: Partial title match ---
+        log.info("  Tier 3: partial title LIKE %%%s%%", term)
         cursor.execute(
-            f"SELECT TOP 5 uid, Title, Artist, Album, Duration, Plays, CatID "
+            f"SELECT TOP 5 {SELECT_COLS} "
             f"FROM Audio WHERE {base_where} AND LOWER(Title) LIKE ? "
             f"ORDER BY Plays DESC",
             (f"%{term.lower()}%",),
         )
         rows = cursor.fetchall()
         if rows:
+            log.info("  Tier 3 HIT: %d results, best: %s - %s", len(rows), rows[0][1], rows[0][2])
             return _row_to_dict(rows[0]), 3
 
         # Tier 3b: word-split fallback — match ALL words
         words = term.split()
         if len(words) > 1:
+            log.info("  Tier 3b: word-split %r", words)
             like_clauses = " AND ".join(["LOWER(Title) LIKE ?"] * len(words))
             params = [f"%{w.lower()}%" for w in words]
             cursor.execute(
-                f"SELECT TOP 5 uid, Title, Artist, Album, Duration, Plays, CatID "
+                f"SELECT TOP 5 {SELECT_COLS} "
                 f"FROM Audio WHERE {base_where} AND {like_clauses} "
                 f"ORDER BY Plays DESC",
                 params,
             )
             rows = cursor.fetchall()
             if rows:
+                log.info("  Tier 3b HIT: %d results, best: %s - %s", len(rows), rows[0][1], rows[0][2])
                 return _row_to_dict(rows[0]), 3
 
         # --- Tier 4: Artist-only match (most-played) ---
         artist_search = artist_hint or term
+        log.info("  Tier 4: artist-only LIKE %%%s%%", artist_search)
         cursor.execute(
-            f"SELECT TOP 1 uid, Title, Artist, Album, Duration, Plays, CatID "
+            f"SELECT TOP 1 {SELECT_COLS} "
             f"FROM Audio WHERE {base_where} AND LOWER(Artist) LIKE ? "
             f"ORDER BY Plays DESC",
             (f"%{artist_search.lower()}%",),
         )
         row = cursor.fetchone()
         if row:
+            log.info("  Tier 4 HIT: %s - %s", row[1], row[2])
             return _row_to_dict(row), 4
 
         # --- Tier 5: Random from rotation categories ---
+        log.info("  Tier 5: random from rotation categories %s", ROTATION_CATEGORIES)
         cat_placeholders = ",".join(["?"] * len(ROTATION_CATEGORIES))
         cursor.execute(
-            f"SELECT TOP 1 uid, Title, Artist, Album, Duration, Plays, CatID "
-            f"FROM Audio WHERE {base_where} AND CatID IN ({cat_placeholders}) "
+            f"SELECT TOP 1 {SELECT_COLS} "
+            f"FROM Audio WHERE {base_where} AND Category IN ({cat_placeholders}) "
             f"ORDER BY NEWID()",
             ROTATION_CATEGORIES,
         )
         row = cursor.fetchone()
         if row:
+            log.info("  Tier 5 HIT: %s - %s (cat %s)", row[1], row[2], row[6])
             return _row_to_dict(row), 5
 
         # Absolute fallback: any random music track
+        log.info("  Tier 5 fallback: any random track")
         cursor.execute(
-            f"SELECT TOP 1 uid, Title, Artist, Album, Duration, Plays, CatID "
+            f"SELECT TOP 1 {SELECT_COLS} "
             f"FROM Audio WHERE {base_where} ORDER BY NEWID()"
         )
         row = cursor.fetchone()
         if row:
+            log.info("  Tier 5 fallback HIT: %s - %s", row[1], row[2])
             return _row_to_dict(row), 5
 
+        log.warning("  NO RESULTS at any tier")
         return None, 0
     finally:
         conn.close()
@@ -215,10 +230,13 @@ def _row_to_dict(row):
 
 def queue_track(uid):
     """Queue a track as the next item in PlayoutONE."""
+    log.info("QUEUE: attempting TCP LOADNEXT %s to %s:%s", uid, P1_API_HOST, P1_API_PORT)
     # Primary: TCP command
     resp = send_p1_command(f"LOADNEXT {uid}")
     if resp is not None:
+        log.info("QUEUE: TCP success, response=%r", resp)
         return True, resp
+    log.warning("QUEUE: TCP failed, trying SQL fallback")
 
     # Fallback: direct SQL INSERT into Playlists
     try:
@@ -333,19 +351,24 @@ def dj_request():
 
     # Parse and search
     term, artist_hint = parse_request(user_text)
+    log.info("DJ REQUEST: raw=%r parsed_term=%r artist_hint=%r", user_text, term, artist_hint)
     try:
         track, tier = search_tracks(term, artist_hint)
     except Exception as e:
-        log.error("Search error: %s", e)
+        log.error("Search error: %s", e, exc_info=True)
         msg = add_chat_message("dj", f"GAME OVER: Database error -- {e}")
         return jsonify({"reply": msg["text"], "track": None, "tier": 0, "message": msg}), 500
 
     if not track:
+        log.warning("No tracks found for request: %r", user_text)
         msg = add_chat_message("dj", f"EMPTY LIBRARY! No tracks found at all. Is the database connected?")
         return jsonify({"reply": msg["text"], "track": None, "tier": 0, "message": msg})
 
+    log.info("MATCH tier=%d: \"%s\" by %s (uid=%s, plays=%s)", tier, track["title"], track["artist"], track["uid"], track["plays"])
+
     # Queue the track
     queued, queue_detail = queue_track(track["uid"])
+    log.info("QUEUE result: queued=%s detail=%r", queued, queue_detail)
 
     # Build response
     dj_text = build_dj_response(track, tier, term)
