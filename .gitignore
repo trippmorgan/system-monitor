@@ -1,5 +1,6 @@
 # Logs and generated data
 logs/*.log
+logs/*.json
 dashboard/news-cache/*.json
 
 # PID files
