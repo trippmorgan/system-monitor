@@ -2,8 +2,14 @@
 logs/*.log
 dashboard/news-cache/*.json
 
-# PID files
+# PID files and runtime state
 dashboard/.*.pid
+logs/.bridge.pid
+logs/.pending-break
+logs/.botspace-lastseen
+
+# Stray Windows redirect artifact (`> nul` instead of `> $null`)
+nul
 
 # Python
 __pycache__/

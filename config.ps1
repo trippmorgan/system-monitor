@@ -104,6 +104,17 @@ $env:P1_API_HOST     = $P1_API_HOST
 $env:P1_API_PORT     = $P1_API_PORT
 
 #-------------------------------------------------------------------------------
+# DJ Personality LLM (Ollama on jarvis superserver; canned lines if unreachable)
+#-------------------------------------------------------------------------------
+$script:DJ_LLM_URL     = if ($env:DJ_LLM_URL)     { $env:DJ_LLM_URL }     else { "http://100.80.111.84:11434" }
+$script:DJ_LLM_MODEL   = if ($env:DJ_LLM_MODEL)   { $env:DJ_LLM_MODEL }   else { "phi3:mini" }
+$script:DJ_LLM_ENABLED = if ($env:DJ_LLM_ENABLED) { $env:DJ_LLM_ENABLED } else { "1" }
+
+$env:DJ_LLM_URL     = $DJ_LLM_URL
+$env:DJ_LLM_MODEL   = $DJ_LLM_MODEL
+$env:DJ_LLM_ENABLED = $DJ_LLM_ENABLED
+
+#-------------------------------------------------------------------------------
 # Load user overrides
 #-------------------------------------------------------------------------------
 # Users can create a user-config.ps1 in the same directory to override defaults

@@ -481,7 +481,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
     <!-- DJ CHAT PANEL -->
     <div class="dj-chat-panel" id="dj-chat-panel">
         <div class="dj-header">
-            <span>CLAUDE DJ</span>
+            <span>WPFQ - DR. FEVER</span>
             <span class="dj-close" onclick="toggleDJChat()">X</span>
         </div>
         <div class="dj-now-playing" id="dj-now-playing">NOW PLAYING: ---</div>
@@ -666,7 +666,7 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
             const container = document.getElementById('dj-messages');
             const div = document.createElement('div');
             div.className = 'dj-msg ' + role;
-            const authorLabel = role === 'user' ? 'YOU' : role === 'dj' ? 'DJ' : 'SYSTEM';
+            const authorLabel = role === 'user' ? 'YOU' : role === 'dj' ? 'FEVER' : 'SYSTEM';
             div.innerHTML = '<div class="dj-msg-author">' + authorLabel + '</div>' +
                             '<div>' + escapeHtml(text) + '</div>';
             container.appendChild(div);
@@ -727,10 +727,10 @@ Style: NES.css (https://nostalgic-css.github.io/NES.css/)
                     });
                 }
                 if (!data.messages || data.messages.length === 0) {
-                    appendDJMessage('dj', 'INSERT COIN! Request any song from the library.');
+                    appendDJMessage('dj', "You're on the air with the Doctor. WPFQ, Radio Free Albany. What'll it be?");
                 }
             } catch (e) {
-                appendDJMessage('dj', 'INSERT COIN! Request any song from the library.');
+                appendDJMessage('dj', "You're on the air with the Doctor. WPFQ, Radio Free Albany. What'll it be?");
             }
         }
 
