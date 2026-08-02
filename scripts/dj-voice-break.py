@@ -198,9 +198,17 @@ def main():
     # fallback then found no playhead (the bridge does not set Status rows).
     if bridge_running():
         try:
+            # PREPEND, never overwrite: the queue may hold a programmed set,
+            # and opening it "w" once wiped 17 queued tracks mid-shift
+            # (2026-08-02 17:17). The break goes first, the set follows.
+            existing = []
+            if os.path.exists(PENDING_BREAK):
+                with open(PENDING_BREAK, "r", encoding="utf-8") as f:
+                    existing = [ln.rstrip("\n") for ln in f if ln.strip()]
             with open(PENDING_BREAK, "w", encoding="utf-8") as f:
-                f.write(uid)
-            log(f"air bridge is running -- handed break {uid} to it")
+                f.write("\n".join([f"{uid}|Fever Hourly Break"] + existing) + "\n")
+            log(f"air bridge is running -- handed break {uid} to it "
+                f"(queue now {len(existing) + 1} items)")
             conn.close()
             return 0
         except OSError as e:
