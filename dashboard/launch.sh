@@ -32,6 +32,7 @@ else
     echo "Warning: config.sh not found, using defaults" >&2
     DASHBOARD_DIR="$SCRIPT_DIR"
     DASHBOARD_PORT=8787
+    DASHBOARD_BIND_HOST=0.0.0.0
     CHECK_INTERVAL=30
     NEWS_REFRESH_INTERVAL=5
     ENABLE_BROWSER_OPEN=1
@@ -41,6 +42,7 @@ DASHBOARD_DIR="${DASHBOARD_DIR:-$SCRIPT_DIR}"
 PID_FILE="$DASHBOARD_DIR/.refresh.pid"       # Stores refresh loop PID
 SERVER_PID_FILE="$DASHBOARD_DIR/.server.pid" # Stores HTTP server PID
 PORT="${DASHBOARD_PORT:-8787}"
+BIND_HOST="${DASHBOARD_BIND_HOST:-0.0.0.0}"
 
 # Terminal colors
 GREEN='\033[0;32m'
@@ -102,11 +104,11 @@ echo $! > "$PID_FILE"
 
 #-------------------------------------------------------------------------------
 # Step 3: Start HTTP Server
-# Python's built-in server, bound to localhost only for security
+# Python's built-in server, bound to configured host (0.0.0.0 by default for LAN/Tailscale reachability)
 #-------------------------------------------------------------------------------
 echo -e "${GREEN}[3/4]${NC} Starting web server on port $PORT..."
 cd "$DASHBOARD_DIR"
-python3 -m http.server $PORT --bind 127.0.0.1 >/dev/null 2>&1 &
+python3 -m http.server $PORT --bind "$BIND_HOST" >/dev/null 2>&1 &
 echo $! > "$SERVER_PID_FILE"
 sleep 1
 
@@ -114,7 +116,10 @@ sleep 1
 # Step 4: Open Dashboard in Browser (if enabled)
 # Tries xdg-open, then Firefox, then Chrome
 #-------------------------------------------------------------------------------
-DASHBOARD_URL="http://localhost:$PORT/index.html"
+DASHBOARD_URL="http://${BIND_HOST:-localhost}:$PORT/index.html"
+if [ "$BIND_HOST" = "0.0.0.0" ]; then
+    DASHBOARD_URL="http://$(hostname -I | awk '{print $1}'):$PORT/index.html"
+fi
 
 if [ "${ENABLE_BROWSER_OPEN:-1}" -eq 1 ]; then
     echo -e "${GREEN}[4/4]${NC} Opening dashboard in browser..."
