@@ -48,8 +48,20 @@ PRIORITY_QUEUE = r"C:\Users\PlayoutONE\system-monitor\logs\.pending-break"
 
 
 def log(msg):
+    """
+    Never let logging kill the bridge. The Windows console is cp1252, and a
+    library track title containing e.g. a Greek sigma crashed the whole run
+    on 2026-08-02 21:58 with UnicodeEncodeError, taking the station off the
+    air mid-shift. Printing is best-effort; the UTF-8 file is the real record.
+    """
     line = f"[{datetime.now():%Y-%m-%d %H:%M:%S}] {msg}"
-    print(line, flush=True)
+    try:
+        print(line, flush=True)
+    except (UnicodeEncodeError, OSError):
+        try:
+            print(line.encode("ascii", "replace").decode("ascii"), flush=True)
+        except Exception:
+            pass
     try:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
             f.write(line + "\n")

@@ -34,7 +34,14 @@ LOG_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__
 
 def log(msg):
     line = f"[{datetime.now():%Y-%m-%d %H:%M:%S}] VOICE: {msg}"
-    print(line)
+    try:
+        print(line)
+    except (UnicodeEncodeError, OSError):
+        # Console is cp1252; a track title outside it must not abort the break.
+        try:
+            print(line.encode("ascii", "replace").decode("ascii"))
+        except Exception:
+            pass
     try:
         with open(LOG_FILE, "a", encoding="utf-8") as f:
             f.write(line + "\n")
