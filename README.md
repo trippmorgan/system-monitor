@@ -94,6 +94,12 @@ crontab -e
 - **Terminal Dashboard** - Quick command-line view with color-coded status
 - **News Desk** - Interactive terminal menu for browsing news categories
 
+### WPFQ DJ (Dr. Fever)
+- **Request Line** - Dashboard chat widget searches the PlayoutONE library and queues songs on air
+- **Hourly Voice Breaks** - Neural-TTS Fever patter, generated and aired automatically at :17
+- **Air Bridge** - Keeps the station broadcasting from the scheduled log when PlayoutONE automation is down
+- **BotSpace Presence** - Dr. Fever posts status and banter to the network's agent feed
+
 ---
 
 ## Directory Structure
@@ -305,6 +311,74 @@ Terminal-based dashboard for quick system overview.
 # or use the alias:
 dashboard
 ```
+
+---
+
+## WPFQ DJ System (Dr. Fever)
+
+The dashboard node doubles as the automation brain for **WPFQ / Radio Free
+Albany** ("Q102 The Queen Bee"), a PlayoutONE-based radio station. An on-air
+persona — **Dr. Fever**, in the WKRP tradition — answers listener requests,
+cuts hourly voice breaks with neural TTS, and keeps the station broadcasting
+when PlayoutONE's own automation is down. Built and battle-tested 2026-08-01/02.
+
+### Components
+
+| Piece | What it does |
+|-------|--------------|
+| `dashboard/dj-server.py` | Flask server: dashboard + DJ chat API. Song requests search the PlayoutONE `Audio` table (5-tier match) and swap into the next unloaded song slot in the log. Now-playing reads the player's port-7000 status feed as ground truth, DB as fallback. |
+| `scripts/dj-hourly-comment.ps1` | Scheduled task `WPFQ-Fever-Hourly` (hourly at :17). Generates Fever patter (Ollama on the jarvis superserver when reachable, canned lines otherwise), posts it to the dashboard chat and BotSpace, then voices it on air. |
+| `scripts/dj-voice-break.py` | TTS (edge-tts, `en-US-ChristopherNeural`) → AutoImporter → on air. Hands the break to the air bridge when one is running (prepends to its queue); otherwise fires `PLAY UID` at a segue with slot-swap fallback. |
+| `scripts/dj-air-bridge.py` | Emergency playback when PlayoutONE runs licensed-but-idle with an empty grid. Walks the scheduled log from the database one item at a time, **firing only into confirmed silence** (all decks at zero, checked twice) so overlap is impossible. Supports a priority queue (`logs/.pending-break`, `uid\|label` per line) for breaks and hand-programmed sets. Stands down when audio it didn't start appears. |
+
+### PlayoutONE integration notes (hard-won)
+
+- **Port map:** 7000 = player status feed (read-only; `CURRENT`, per-deck
+  `PROGRESS`/`TIME`; dislikes concurrent readers). 81 = HTTP command API,
+  `http://localhost:81/?c=COMMAND`. 1073 is **P1_Monitor**, not the player —
+  it silently swallows unknown commands.
+- **`PLAY UID` starts the item on a FREE deck — it does not replace what is
+  playing.** Fire it over live audio and you get overlap on the transmitter.
+  Only fire into silence, or at a confirmed segue.
+- **`-255` is not an error.** The HTTP API returns it even on success; verify
+  results on the status feed, never trust the response body.
+- **Empty grid ≠ empty log.** The database can hold weeks of `Playlists` rows
+  while the app's playlist grid is empty; the decks then run dry (`PLAY NEXT`
+  returns nothing). Loading the log needs the console; the air bridge covers
+  the gap.
+- **License:** Monitor → Main Settings → License tab ("Internet License" to
+  re-check). The 2026-08-02 v5.4 update changed the machine fingerprint and
+  wiped `LicenseSettings`; registration identity lives in License ID
+  992-245-458. `logs/` and the memory files hold recovery details.
+
+### Operating the station
+
+```powershell
+# Hourly voice breaks (survives reboots)
+.\scripts\dj-hourly-comment.ps1 -Install
+
+# Emergency: keep broadcasting when PlayoutONE has no log loaded
+python scripts\dj-air-bridge.py --minutes 600            # auto-resume point
+python scripts\dj-air-bridge.py --from-gindex 2026080320.0017
+
+# Program a set: one "uid|label" per line, bridge plays it ahead of the log
+# (hourly breaks prepend to this same queue and never overwrite it)
+Set-Content logs\.pending-break "93013|DROP: Fever Grunge Set Intro"
+```
+
+### 2026-08-02 incident log (why the safeguards exist)
+
+- Machine rebooted 12:53 after a PlayoutONE update; app came back idle →
+  ~1h40m dead air until relicensing at the console.
+- License failure: fingerprint change post-update. Recovered wiped
+  registration data from a prior DB read; Tripp relicensed via Monitor.
+- First air-bridge draft fired near track end, raced the decks, and stacked
+  ~90s of overlapping audio → rebuilt with the silence gate.
+- Hourly break handoff once overwrote a 17-track programmed set (opened the
+  queue file in "w") → prepend-only now.
+- A track title with a Greek sigma crashed the bridge via `print()` on a
+  cp1252 console after 6+ hours of clean playback → logging is best-effort
+  and can no longer take down playback.
 
 ---
 
