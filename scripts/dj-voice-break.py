@@ -64,6 +64,18 @@ PID_FILE = r"C:\Users\PlayoutONE\system-monitor\logs\.bridge.pid"
 PENDING_BREAK = r"C:\Users\PlayoutONE\system-monitor\logs\.pending-break"
 
 
+def _slot_swap_available(cur):
+    """
+    True when native automation is walking the log (Status 1/2 rows exist),
+    which is when the slot-swap path works and is preferred over PLAY UID.
+    """
+    try:
+        cur.execute("SELECT TOP 1 GIndex FROM Playlists WHERE Status IN (1, 2)")
+        return cur.fetchone() is not None
+    except Exception:
+        return False
+
+
 def bridge_running():
     """True if dj-air-bridge.py is currently driving playback."""
     try:
@@ -221,8 +233,12 @@ def main():
         except OSError as e:
             log(f"could not hand off to bridge ({e}); falling back")
 
-    # 5b. Otherwise air it precisely at the next segue via PLAY UID
-    if try_precise_air(uid):
+    # 5b. With native automation running, prefer the slot-swap: it rides the
+    # automation's own log-walk (proven on air) instead of racing its deck
+    # loads with PLAY UID at the segue, which automation usually wins.
+    # try_slot_swap below returns via the shared code path; fall through.
+    # 5c. Last resort: fire PLAY UID at the next segue.
+    if not _slot_swap_available(cur) and try_precise_air(uid):
         conn.close()
         return 0
 
